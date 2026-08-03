@@ -1,0 +1,43 @@
+name: Pull request lint
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
+
+concurrency:
+  group: pull-request-lint-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # The squashed commit subject is the pull request title, and the release
+  # pipeline reads it to decide the next version.
+  TYPES: feat|fix|docs|refactor|perf|test|build|ci|chore|revert|style
+
+jobs:
+  branch-and-title:
+    name: Verify branch and title
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Branch and title follow the convention
+        env:
+          BRANCH: ${{ github.head_ref }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          failed=0
+
+          if ! printf '%s' "$BRANCH" | grep -qE "^($TYPES)/[a-z0-9-]+$"; then
+            echo "::error::branch '$BRANCH' does not match <type>/<slug>, type being one of $TYPES"
+            failed=1
+          fi
+
+          if ! printf '%s' "$TITLE" | grep -qE "^($TYPES)(\([a-z0-9-]+\))?!?: .+"; then
+            echo "::error::title '$TITLE' does not match 'type: description', type being one of $TYPES"
+            failed=1
+          fi
+
+          exit $failed

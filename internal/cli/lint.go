@@ -112,10 +112,8 @@ func runLint(e *env, args []string) int {
 	return 0
 }
 
-// chooseConfig settles which policy applies. An explicit language wins, then a
-// project's own .vale.ini above the target, and only then every registered
-// language, which is the widest reading and the least likely to be what the
-// project meant.
+// chooseConfig settles which policy applies: an explicit language, then a
+// project's own .vale.ini above the target, then every registered language.
 func chooseConfig(e *env, f lintFlags) (string, error) {
 	languages, err := loadLanguages(e)
 	if err != nil {
@@ -123,9 +121,8 @@ func chooseConfig(e *env, f lintFlags) (string, error) {
 	}
 
 	if f.Languages == "" {
-		// A project's own policy wins, but only when nothing was asked for that
-		// it cannot express. A preset has to be honoured or refused, never
-		// quietly dropped because a .vale.ini happened to sit above the target.
+		// A preset has to be honoured or refused, never dropped because a
+		// .vale.ini happened to sit above the target.
 		if found, ok := findProjectConfig(f.Targets[0]); ok && f.Preset == "" {
 			return found, nil
 		}
@@ -179,10 +176,9 @@ func generateConfig(e *env, languages registry.Languages, codes []string, preset
 	return path, os.WriteFile(path, []byte(valeconf.Render(options)), 0o644)
 }
 
-// resolvePreset looks a preset up by the pair of language and code, because a
-// code such as "docs" exists under more than one language. Asking for one
-// outside the requested languages is refused with the reason rather than
-// silently ignored, since its rules would not match the text.
+// resolvePreset looks up by the pair, because a code such as "docs" exists
+// under more than one language. A preset outside those languages is refused:
+// its rules were measured on other text.
 func resolvePreset(e *env, codes []string, name string) (*registry.Preset, error) {
 	presets, err := loadPresets(e)
 	if err != nil {
@@ -291,9 +287,8 @@ func loadLanguages(e *env) (registry.Languages, error) {
 	return registry.ParseLanguages(file)
 }
 
-// loadPresets reads the preset registry, building it first when a fresh clone
-// has none. Building reads committed data only, so it costs a moment and needs
-// no network.
+// loadPresets reads the preset registry, building it first on a fresh clone.
+// The build reads committed data only and needs no network.
 func loadPresets(e *env) (registry.Presets, error) {
 	if _, err := os.Stat(e.Layout.Presets()); err != nil {
 		runner := build.New(e.Layout, e.Err)

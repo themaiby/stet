@@ -1,7 +1,6 @@
 version: 2
 
-# The plugin fetches its own binary, so the asset names here are the ones
-# scripts/bootstrap.sh asks for. Changing a name here breaks installation.
+# scripts/bootstrap.sh downloads these assets by name.
 project_name: stet
 
 builds:
@@ -26,7 +25,9 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
-    files: []
+    # An empty list means "take the defaults", which pull in the README.
+    files:
+      - none*
 
 checksum:
   name_template: checksums.txt

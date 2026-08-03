@@ -8,9 +8,8 @@ import (
 	"strings"
 )
 
-// Ukrainian spells the apostrophe in more than one way, and a word is emitted
-// under each. The speller compares characters, so a text that picked a
-// different one would come back misspelt.
+// Ukrainian spells the apostrophe in more than one way, and the speller
+// compares characters, so a word is emitted under each.
 const (
 	apostropheModifier = "ʼ" // ʼ modifier letter
 	apostropheAscii    = "'"
@@ -28,15 +27,11 @@ type DictionaryStats struct {
 // the upstream rules need a lookbehind, which Go has not got.
 const Affix = "SET UTF-8\n"
 
-// Dictionary converts the dict_uk corpus into a Hunspell dictionary and a lemma
-// index.
+// Dictionary converts the dict_uk corpus into a Hunspell dictionary and the
+// lemma index the pattern converter expands inflected tokens with.
 //
-// The corpus puts a lemma at column zero and its inflected forms on indented
-// lines beneath it. Stripping the indent first is mandatory, or only lemmas
-// survive.
-//
-// The lemma index exists so that the pattern converter can expand inflected
-// tokens without downloading this corpus a second time.
+// The corpus puts a lemma at column zero and its forms on indented lines, so
+// stripping the indent first is mandatory or only lemmas survive.
 func Dictionary(corpus io.Reader, dic, lemmas io.Writer) (DictionaryStats, error) {
 	var forms []string
 	seenLemma := map[string]bool{}
@@ -110,8 +105,7 @@ func Dictionary(corpus io.Reader, dic, lemmas io.Writer) (DictionaryStats, error
 }
 
 // expandApostrophes adds the other two spellings for every word that carries
-// one. Words without an apostrophe are left alone, which is most of them, and
-// is why this costs far less than three copies of the corpus.
+// one, which is few of them, so this costs far less than three copies.
 func expandApostrophes(forms []string) []string {
 	out := forms
 	for _, form := range forms {

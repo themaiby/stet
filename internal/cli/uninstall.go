@@ -11,9 +11,8 @@ import (
 	"github.com/themaiby/stet/internal/warmup"
 )
 
-// runUninstall removes everything this plugin downloaded or generated. Nothing
-// outside the plugin directory and its own data directory is touched. Removing
-// the plugin itself is the package manager's job.
+// runUninstall removes everything this plugin downloaded or generated, and
+// nothing outside its own two directories.
 func runUninstall(e *env, args []string) int {
 	dry := len(args) > 0 && args[0] == "--dry-run"
 
@@ -70,9 +69,8 @@ func runUninstall(e *env, args []string) int {
 	return 0
 }
 
-// isPresetStyle recognises a generated register style by its language prefix.
-// The hand-written styles are ProseCore, ProseUK and ProseEN, which this leaves
-// alone.
+// isPresetStyle recognises a generated register style, leaving the hand-written
+// ProseCore, ProseUK and ProseEN alone.
 func isPresetStyle(name string) bool {
 	for _, prefix := range []string{"UK", "EN"} {
 		if strings.HasPrefix(name, prefix) && !strings.HasPrefix(name, "Prose") {

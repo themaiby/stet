@@ -1,6 +1,5 @@
 // Package fetch is the outward side of the tool: it reaches the network and
-// opens archives. Everything the domain packages need arrives through here as
-// plain bytes or a reader, which is what keeps them testable without one.
+// opens archives, and hands the rest plain bytes or a reader.
 package fetch
 
 import (
@@ -44,9 +43,8 @@ func (c *Client) Bytes(url string) ([]byte, error) {
 // closes it.
 func (c *Client) Stream(url string) (io.ReadCloser, error) { return c.open(url) }
 
-// Bzip2 downloads a bzip2 stream and hands back the decompressed contents.
-// Doing it in the process is what removes the bunzip2 dependency, which was
-// absent often enough to cost a rule set.
+// Bzip2 downloads and decompresses in process, which is what removes the
+// bunzip2 dependency.
 func (c *Client) Bzip2(url string) (io.ReadCloser, error) {
 	body, err := c.open(url)
 	if err != nil {
@@ -55,9 +53,8 @@ func (c *Client) Bzip2(url string) (io.ReadCloser, error) {
 	return readCloser{Reader: bzip2.NewReader(body), closer: body}, nil
 }
 
-// Binary downloads an archive and writes one file out of it to dest, executable.
-// Both archive shapes upstream uses are handled here, so that no caller has to
-// know which platform uses which.
+// Binary downloads an archive and writes one file out of it to dest,
+// executable. Both shapes upstream uses are handled, zip and tar.gz.
 func (c *Client) Binary(url, member, dest string) error {
 	data, err := c.Bytes(url)
 	if err != nil {
@@ -129,9 +126,8 @@ func extractTarGz(data []byte, member, dest string) error {
 	return fmt.Errorf("stet: %s not found in archive", member)
 }
 
-// writeExecutable writes to a neighbouring temporary file and renames it into
-// place, so that a download interrupted halfway leaves no half a binary behind
-// for the next run to trust.
+// writeExecutable renames into place, so an interrupted download leaves no half
+// a binary for the next run to trust.
 func writeExecutable(dest string, src io.Reader) error {
 	tmp, err := os.CreateTemp(filepath.Dir(dest), ".stet-*")
 	if err != nil {

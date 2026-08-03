@@ -7,11 +7,9 @@ import (
 	"strings"
 )
 
-// xnode is an XML element with the text layout the converter needs: Text is
-// what sits before the first child, Tail is what sits after the element's own
-// end tag. Go's struct unmarshalling folds all character data of an element
-// together, which loses the distinction, and the distinction is what tells a
-// suggestion's words apart from the words around it.
+// xnode keeps Text, what sits before the first child, apart from Tail, what
+// sits after the end tag. Go's struct unmarshalling folds the two together,
+// which loses a suggestion's own words.
 type xnode struct {
 	Name     string
 	Attr     map[string]string
@@ -21,8 +19,8 @@ type xnode struct {
 }
 
 // entityDecl matches an internal DTD entity declaration. The Ukrainian rule
-// files define punctuation classes that way and then reference them inside
-// tokens, so a parser that cannot resolve them reads no rules at all.
+// files define punctuation classes that way, and unresolved they read as no
+// rules at all.
 var entityDecl = regexp.MustCompile(`<!ENTITY\s+([A-Za-z_][\w.-]*)\s+"([^"]*)"\s*>`)
 
 var predefined = strings.NewReplacer(
@@ -33,16 +31,13 @@ var predefined = strings.NewReplacer(
 	"&amp;", "&",
 )
 
-// parseXML reads a document into a tree. Entities declared in the internal
-// subset are resolved first, the way the reference implementation's parser
-// resolved them.
+// parseXML reads a document into a tree, resolving entities declared in the
+// internal subset first.
 func parseXML(data []byte) (*xnode, error) {
 	decoder := xml.NewDecoder(strings.NewReader(string(data)))
 	decoder.Entity = map[string]string{}
 	for _, m := range entityDecl.FindAllSubmatch(data, -1) {
-		// An entity body carries the predefined entities unexpanded, and they
-		// are expanded once when the entity is declared, not again where it is
-		// used.
+		// Predefined entities inside a body expand at declaration, not at use.
 		decoder.Entity[string(m[1])] = predefined.Replace(string(m[2]))
 	}
 
@@ -102,9 +97,8 @@ func (n *xnode) find(name string) *xnode {
 	return nil
 }
 
-// findAll returns every direct child with this name. Tokens nested inside an
-// <and> or an <or> are deliberately out of reach: they express a condition this
-// converter cannot carry across.
+// findAll returns direct children only, leaving tokens inside <and> or <or> out
+// of reach: they express a condition this converter cannot carry across.
 func (n *xnode) findAll(name string) []*xnode {
 	var out []*xnode
 	for _, c := range n.Children {

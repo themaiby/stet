@@ -8,9 +8,7 @@ import (
 	"unicode/utf8"
 )
 
-// Limits the converter works to. Each one keeps a rule that Vale would run but
-// nobody would want: an expression too broad to mean anything, or too long to
-// read when it fires.
+// Limits that keep out rules Vale would run but nobody would want.
 const (
 	maxForms       = 40   // a lemma with more forms than this makes an unreadable regex
 	minLiteral     = 6    // below this a mandatory match is too broad to mean anything
@@ -20,8 +18,7 @@ const (
 )
 
 // LemmaIndex maps a lemma to its inflected forms, stored unsplit. Splitting on
-// lookup keeps the whole Ukrainian index near its file size rather than several
-// times over, and only the handful of lemmas a rule names is ever looked up.
+// lookup keeps the 174 MB Ukrainian index near its file size in memory.
 type LemmaIndex map[string]string
 
 // Forms returns the inflected forms of a lemma.
@@ -62,10 +59,8 @@ var openEndedWildcard = regexp.MustCompile(`\.[*+{]`)
 var backReference = regexp.MustCompile(`\\\d+`)
 
 // Patterns converts LanguageTool pattern rules into a Vale existence rule. A
-// rule survives when every one of its tokens is literal text, a regex, or an
-// inflected form the lemma index can expand. Anything needing part-of-speech
-// tagging is counted and skipped, because Vale matches text and cannot ask a
-// tagger.
+// rule survives when every token is literal text, a regex, or an inflected form
+// the index can expand; anything needing a tagger is counted and skipped.
 func Patterns(documents [][]byte, lemmas LemmaIndex, o PatternOptions) PatternResult {
 	type converted struct {
 		Expr  string
@@ -77,9 +72,7 @@ func Patterns(documents [][]byte, lemmas LemmaIndex, o PatternOptions) PatternRe
 	for _, doc := range documents {
 		root, err := parseXML(doc)
 		if err != nil || root == nil {
-			// A document this parser cannot read contributes no rules. Failing
-			// the whole build over one upstream file would take the other rules
-			// down with it.
+			// One unreadable upstream file must not take the other rules down.
 			continue
 		}
 		root.descendants("rule", func(rule *xnode) {
@@ -242,9 +235,8 @@ func tokenRegex(token *xnode, lemmas LemmaIndex) (string, bool, int, bool) {
 	return piece, true, shortest, true
 }
 
-// regexSpecials is the set the reference implementation escaped. It is wider
-// than the set Go's own quoting uses, and the difference shows up in the
-// generated file, so it is spelled out here rather than borrowed.
+// regexSpecials is wider than what regexp.QuoteMeta escapes, and the difference
+// shows up in the generated file.
 const regexSpecials = "()[]{}?*+-|^$\\.&~# \t\n\r\v\f"
 
 func escapeRegex(s string) string {

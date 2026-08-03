@@ -1,8 +1,5 @@
-// Package tool resolves the external binaries this plugin drives.
-//
-// The rule is the same for each: use the one already on the machine, otherwise
-// download into the plugin data directory. Nothing lands anywhere else, so
-// uninstall removes every one of them by removing that directory.
+// Package tool resolves the external binaries this plugin drives: the one
+// already on the machine, otherwise a download into the plugin data directory.
 package tool
 
 import (
