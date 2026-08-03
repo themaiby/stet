@@ -1,8 +1,6 @@
-// Package generate turns upstream data into Vale rule files.
-//
-// Every function here is a transform: text in, text out. The download, the
-// temporary directory and the destination path belong to the caller. That is
-// what lets a test pin the exact bytes of a rule file without a network.
+// Package generate turns upstream data into Vale rule files. Every function
+// here is a transform, text in and text out; fetching and writing belong to the
+// caller.
 package generate
 
 import (
@@ -11,9 +9,8 @@ import (
 	"strings"
 )
 
-// posixSpace is the [[:space:]] class the shell version matched on. Go's
-// unicode.IsSpace is wider, and widening the class would drop keys the old
-// pipeline kept.
+// posixSpace is [[:space:]]. Go's unicode.IsSpace is wider, and widening it
+// would drop keys.
 const posixSpace = " \t\n\v\f\r"
 
 // SubstitutionOptions describes one rule file built from a LanguageTool
@@ -69,16 +66,14 @@ func Substitution(r io.Reader, o SubstitutionOptions) (string, int, error) {
 		if o.DropContext && strings.HasPrefix(value, "ctx:") {
 			continue
 		}
-		// The key is marked seen before the value is judged, which is what the
-		// shell pipeline did: a key whose first entry is unusable stays out even
-		// if a later line would have supplied a good one.
+		// Marking seen before checking the value keeps a key out when its first
+		// entry is unusable, even if a later line would have served.
 		if seen[key] {
 			continue
 		}
 		seen[key] = true
-		// A tab means upstream appended commentary to the replacement rather
-		// than ending the entry. Vale takes one replacement, and the commentary
-		// would arrive inside it.
+		// A tab means upstream appended commentary to the replacement, and Vale
+		// would take the commentary as part of it.
 		if strings.ContainsAny(key, "\t") || strings.ContainsAny(value, "\t") {
 			continue
 		}
@@ -94,9 +89,8 @@ func Substitution(r io.Reader, o SubstitutionOptions) (string, int, error) {
 	return b.String(), pairs, nil
 }
 
-// splitOnce splits on a single separator and reports whether there was exactly
-// one. A line carrying two separators is ambiguous, and guessing which one
-// divides the pair would invent entries nobody wrote.
+// splitOnce requires exactly one separator. Guessing which of two divides the
+// pair would invent entries nobody wrote.
 func splitOnce(line string, sep byte) (string, string, bool) {
 	if strings.Count(line, string(sep)) != 1 {
 		return "", "", false

@@ -56,11 +56,9 @@ func runBuild(e *env, args []string) int {
 	return 0
 }
 
-// detach starts the build in the background and returns at once, so that a
-// session hook can warm the rules up without holding the session.
-//
-// A lock left by a killed run must not wedge the warm-up forever, so a recorded
-// process is believed only while it is still alive.
+// detach starts the build in the background so a session hook does not hold the
+// session. A recorded process is believed only while it is still alive, or a
+// killed run would wedge the warm-up forever.
 func detach(e *env, codes []string) error {
 	if running(e.Layout.PID()) {
 		return nil

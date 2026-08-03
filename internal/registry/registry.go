@@ -1,9 +1,5 @@
 // Package registry reads the two pipe-separated tables the rest of the tool
 // steers by: which languages exist, and which presets were measured for them.
-//
-// Nothing here touches the file system or the network. Callers hand it a
-// reader, which is what lets the tests state a registry inline instead of
-// keeping fixtures on disk.
 package registry
 
 import (
@@ -106,9 +102,8 @@ func (p Presets) Find(lang, code string) (Preset, bool) {
 	return Preset{}, false
 }
 
-// FindByCode returns the first preset with this code under any language. It
-// answers "which language was this measured for", which is what the error
-// message needs when the caller asked for a preset the language does not have.
+// FindByCode returns the first preset with this code under any language, which
+// is what the refusal message needs to name.
 func (p Presets) FindByCode(code string) (Preset, bool) {
 	for _, preset := range p {
 		if preset.Code == code {

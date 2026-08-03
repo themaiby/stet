@@ -1,9 +1,6 @@
-// Package paths answers where everything lives.
-//
-// The plugin root holds what the repository commits: rules, registries and
-// measurements. The data directory holds what is downloaded or generated, and
-// uninstall empties it. Keeping the two apart is what lets uninstall promise
-// that nothing outside them is touched.
+// Package paths answers where everything lives. The plugin root holds what the
+// repository commits; the data directory holds what is downloaded or generated,
+// and uninstall empties it.
 package paths
 
 import (

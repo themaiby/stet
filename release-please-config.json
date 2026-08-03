@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "go",
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {
+      "package-name": "stet",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        "scripts/bootstrap.sh"
+      ]
+    }
+  },
+  "changelog-sections": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Fixes" },
+    { "type": "perf", "section": "Performance" },
+    { "type": "docs", "section": "Documentation" },
+    { "type": "refactor", "section": "Refactor" },
+    { "type": "test", "section": "Tests" },
+    { "type": "build", "section": "Chores" },
+    { "type": "ci", "section": "Chores" },
+    { "type": "chore", "section": "Chores" }
+  ]
+}

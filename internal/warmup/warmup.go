@@ -1,8 +1,5 @@
-// Package warmup models the state of the background rule build.
-//
-// The state is a single line on disk so that any process can read it without a
-// lock. A failed build has to stay visible: silence there would let a rule
-// check nothing at all, and the report would read as clean because it was blind.
+// Package warmup models the state of the background rule build, as a single
+// line on disk that any process can read without a lock.
 package warmup
 
 import (

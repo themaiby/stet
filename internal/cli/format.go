@@ -9,11 +9,8 @@ import (
 	"github.com/themaiby/stet/internal/tool"
 )
 
-// runFormat settles the layout of markdown once the words are settled.
-//
-// It runs last on purpose. Formatting before the edits would be undone by them:
-// a rewritten sentence pushes a table out of shape and a replaced word breaks
-// the wrapping, so the layout can only be fixed after the text stops moving.
+// runFormat settles the layout of markdown. It runs after the edits, because
+// editing is what pushes tables and wrapping out of shape.
 func runFormat(e *env, args []string) int {
 	action := "fmt"
 	var targets []string

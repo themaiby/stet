@@ -1,9 +1,6 @@
-// Package build runs the generators that turn upstream data into rule files,
-// and records how far it got.
-//
-// Sources are fetched at run time and never vendored. LanguageTool is LGPL-2.1
-// and dict_uk is GPL-3.0, and keeping their data out of the repository keeps
-// their licences out of it too.
+// Package build runs the generators and records how far it got. Sources are
+// fetched at run time, never vendored: LanguageTool is LGPL-2.1 and dict_uk is
+// GPL-3.0, and their licences stay out of this repository with their data.
 package build
 
 import (
@@ -82,9 +79,8 @@ func (r *Runner) Run(codes []string) error {
 		fmt.Fprintf(r.Log, "stet: %d/%d building %s\n", step, len(tasks), t.Name)
 
 		if err := t.Run(r); err != nil {
-			// Silence here would let a rule check nothing at all, and the report
-			// would read as clean because it was blind. Record the failure so
-			// that the next lint run announces itself as partial.
+			// Recorded so the next lint run announces itself as partial, rather
+			// than reading as clean because it was blind.
 			r.WriteState(warmup.State{
 				Phase: warmup.Failed, Step: step, Total: len(tasks),
 				Message: t.Name + " failed; rules from it are inactive",

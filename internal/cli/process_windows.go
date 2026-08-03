@@ -7,9 +7,8 @@ import (
 	"os/exec"
 )
 
-// detachProcess is a no-op on Windows: a child started this way already
-// outlives its parent, and the console flags that would hide it are not worth
-// the platform-specific handle work.
+// detachProcess is a no-op on Windows, where a child already outlives its
+// parent.
 func detachProcess(cmd *exec.Cmd) {}
 
 // processAlive reports whether a recorded warm-up is still running. FindProcess

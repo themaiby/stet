@@ -1,9 +1,5 @@
-// Package cli is the driving side of the tool: it turns a command line into a
-// call on one of the packages beneath it and turns the result into output.
-//
-// What lives here is the argument parsing and the wording of what a person
-// sees. Rule generation, config text and state transitions belong to the
-// packages beneath.
+// Package cli turns a command line into a call on the packages beneath it, and
+// their result into output.
 package cli
 
 import (
@@ -88,9 +84,8 @@ func Main(args []string) int {
 // outside the release process, which is worth seeing in a bug report.
 var Version = "dev"
 
-// exitCode unwraps the status of a child that ran and failed, apart from the
-// errors that mean it never ran at all. A linter that found something and a
-// linter that could not start need different reporting.
+// exitCode reports the status of a child that ran and failed, and false for a
+// child that never ran.
 func exitCode(err error) (int, bool) {
 	var exit *exec.ExitError
 	if errors.As(err, &exit) {

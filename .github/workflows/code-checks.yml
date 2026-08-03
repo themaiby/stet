@@ -1,0 +1,57 @@
+name: Code checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: code-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Format, vet, tests and self-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Formatting
+        run: |
+          unformatted=$(gofmt -l ./cmd ./internal)
+          if [ -n "$unformatted" ]; then
+            echo "::error::gofmt would change: $unformatted"
+            exit 1
+          fi
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Tests
+        run: go test ./...
+
+      - name: Build
+        run: go build -o bin/stet ./cmd/stet
+
+      # Also the end-to-end test of a cold install: the binary fetches Vale,
+      # the word lists and the rule data itself.
+      - name: Prose and comments
+        run: ./bin/stet lint README.md skills/ cmd/ internal/
+
+      - name: Markdown layout
+        run: ./bin/stet fmt --check
+
+      - name: Release config
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: check

@@ -11,9 +11,8 @@ import (
 	"github.com/themaiby/stet/internal/valeconf"
 )
 
-// generated names the artefacts init does not copy. The dictionary alone is
-// 96 MB, and a copy would rot with no way to rebuild it, so the project rebuilds
-// them in place instead.
+// generated names what init does not copy: the dictionary alone is 96 MB, and a
+// copy would rot with no way to rebuild it.
 var generated = []string{
 	"config/dictionaries",
 	"ai-tells",
