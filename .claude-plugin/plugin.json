@@ -9,5 +9,7 @@
     "ukrainian",
     "english"
   ],
-  "hooks": "./hooks/hooks.json"
+  "author": {
+    "name": "Kyrylo Lytvynov"
+  }
 }
