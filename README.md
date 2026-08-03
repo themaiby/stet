@@ -86,10 +86,10 @@ against a human control corpus:
 | `data/uk-excess.tsv`                    | measured excess per construction per register        |
 
 A first set of Ukrainian rules was written from intuition and scored well on the
-document behind it. Against a control corpus most of it collapsed, and two rules
+document behind it. Against a control corpus most of it collapsed. Two rules
 turned out to be backwards: `не X, а Y` reads like a machine habit and runs at
-1.1x, while `не просто X, а Y` is ten times commoner in human prose, so a rule
-against it would have corrected people towards the machine.
+1.1x, while `не просто X, а Y` is ten times commoner in human prose. A rule
+against the second would have corrected people towards the machine.
 
 Word lists also rot. `delve` dropped sharply once researchers named it a marker,
 so every rule set carries a date and the packages are pinned rather than tracked

@@ -123,6 +123,14 @@ func runLint(e *env, args []string) int {
 		valeArgs = append(valeArgs, "--glob="+patterns.ValeGlob())
 		fmt.Fprintf(e.Err, "stet: %d path patterns ignored, from %s\n", len(patterns), from)
 	}
+	// Without --lang the config settles what the text is, whether the project
+	// wrote it or this run generated it.
+	if f.Languages == "" {
+		if fromConfig := languagesInConfig(config, languages); len(fromConfig) > 0 {
+			codes = fromConfig
+		}
+	}
+
 	findings := checkGrammar(e, grammarRules(languages, codes), f.Targets)
 	if patterns, _ := ignore.Load(f.Targets[0]); len(patterns) > 0 {
 		kept := findings[:0]
@@ -305,9 +313,13 @@ func syncPackages(e *env, vale, config string) {
 	if !strings.HasPrefix(text, "Packages") && !strings.Contains(text, "\nPackages") {
 		return
 	}
+	// The marker goes stale when the config changes its package list, and a
+	// stale marker keeps the old rules in place with nothing to show for it.
 	marker := filepath.Join(filepath.Dir(config), ".synced-"+filepath.Base(config))
-	if _, err := os.Stat(marker); err == nil {
-		return
+	if synced, err := os.Stat(marker); err == nil {
+		if written, err := os.Stat(config); err == nil && !written.ModTime().After(synced.ModTime()) {
+			return
+		}
 	}
 	cmd := exec.Command(vale, "--config="+config, "sync")
 	if err := cmd.Run(); err == nil {

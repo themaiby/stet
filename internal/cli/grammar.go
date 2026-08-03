@@ -13,8 +13,39 @@ import (
 	"github.com/themaiby/stet/internal/tool"
 )
 
+// languagesInConfig reads which registered languages a config loads. Without
+// --lang the config in use is the only statement of what the text is, and a
+// project that wrote its own must not lose the checks its languages imply.
+func languagesInConfig(path string, languages registry.Languages) []string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+	byStyle := map[string]string{}
+	for _, language := range languages {
+		byStyle[language.Style] = language.Code
+	}
+
+	seen := map[string]bool{}
+	var codes []string
+	for _, line := range strings.Split(string(data), "\n") {
+		key, value, ok := strings.Cut(line, "=")
+		if !ok || strings.TrimSpace(key) != "BasedOnStyles" {
+			continue
+		}
+		for _, style := range strings.Split(value, ",") {
+			code, known := byStyle[strings.TrimSpace(style)]
+			if known && !seen[code] {
+				seen[code] = true
+				codes = append(codes, code)
+			}
+		}
+	}
+	return codes
+}
+
 // grammarRules returns the rules to run beside Vale, and nothing unless English
-// is the only language asked for. A checker that parses English sentences has
+// is the only language in play. A checker that parses English sentences has
 // nothing useful to say about a document written in another language, and a
 // mixed document is one of those.
 func grammarRules(languages registry.Languages, codes []string) []string {
