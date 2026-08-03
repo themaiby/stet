@@ -110,6 +110,7 @@ stet uninstall --dry-run                    what removing it would take
 ```
 
 ```text
+skills/prose-write/  produce text with nothing for the linter to find
 skills/prose-lint/   check a document and work the findings
 skills/prose-policy/ allow a term, demote or silence a rule
 skills/prose-setup/  scaffold a project, keep paths out, add a language
