@@ -15,9 +15,11 @@ import (
 
 const usage = `stet: prose linting for Ukrainian and English, on top of Vale.
 
-  stet lint [--lang CODES] [--preset NAME] [--config PATH] [--output FMT] PATH...
+  stet lint [--lang CODES] [--preset NAME] [--config PATH] [--output FMT]
+           [--fail] PATH...
   stet lint --list-presets
   stet fmt [--check] [PATH...]        format markdown, after the edits are in
+  stet rule <Style>.<Name>            which lever reaches a rule
   stet build [--detach|--status] [CODES]
   stet init [--lang CODES] [--force] [DIR]
   stet doctor
@@ -69,6 +71,8 @@ func Main(args []string) int {
 		run = runBuild
 	case "init":
 		run = runInit
+	case "rule":
+		run = runRule
 	case "doctor":
 		run = runDoctor
 	case "uninstall":

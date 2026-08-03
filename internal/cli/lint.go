@@ -25,6 +25,7 @@ type lintFlags struct {
 	Config      string
 	Output      string
 	ListPresets bool
+	Fail        bool
 	Targets     []string
 }
 
@@ -36,6 +37,9 @@ func runLint(e *env, args []string) int {
 		switch {
 		case args[i] == "--list-presets":
 			f.ListPresets = true
+			i++
+		case args[i] == "--fail":
+			f.Fail = true
 			i++
 		case args[i] == "--":
 			f.Targets = append(f.Targets, args[i+1:]...)
@@ -98,9 +102,13 @@ func runLint(e *env, args []string) int {
 	}
 	syncPackages(e, vale, config)
 
-	cmd := exec.Command(vale, append([]string{
-		"--no-exit", "--config=" + config, "--output=" + f.Output,
-	}, f.Targets...)...)
+	// Reporting is the normal job, so findings do not fail the run. A gate asks
+	// for --fail and gets Vale's own exit code instead.
+	valeArgs := []string{"--config=" + config, "--output=" + f.Output}
+	if !f.Fail {
+		valeArgs = append([]string{"--no-exit"}, valeArgs...)
+	}
+	cmd := exec.Command(vale, append(valeArgs, f.Targets...)...)
 	cmd.Stdout, cmd.Stderr, cmd.Stdin = e.Out, e.Err, os.Stdin
 	if err := cmd.Run(); err != nil {
 		if code, ok := exitCode(err); ok {
