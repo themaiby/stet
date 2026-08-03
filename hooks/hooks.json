@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/ensure-vale.sh --quiet && \"${CLAUDE_PLUGIN_ROOT}\"/scripts/ensure-data.sh --detach all"
+            "command": "stet=$(\"${CLAUDE_PLUGIN_ROOT}\"/scripts/bootstrap.sh --quiet) && \"$stet\" build --detach all"
           }
         ]
       }

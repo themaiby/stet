@@ -1,0 +1,149 @@
+// Package registry reads the two pipe-separated tables the rest of the tool
+// steers by: which languages exist, and which presets were measured for them.
+//
+// Nothing here touches the file system or the network. Callers hand it a
+// reader, which is what lets the tests state a registry inline instead of
+// keeping fixtures on disk.
+package registry
+
+import (
+	"bufio"
+	"io"
+	"strings"
+)
+
+// Language is one row of languages.conf:
+//
+//	code | style directory | packages | default policy lines
+type Language struct {
+	Code     string
+	Style    string
+	Packages []string
+	Policy   []string
+}
+
+// Preset is one row of presets.conf:
+//
+//	lang | code | style directory | description | preliminary
+type Preset struct {
+	Lang        string
+	Code        string
+	Style       string
+	Description string
+	Preliminary bool
+}
+
+// Languages is the language table in file order.
+type Languages []Language
+
+// Presets is the preset table in file order.
+type Presets []Preset
+
+// ParseLanguages reads languages.conf. Rows short of a code are skipped rather
+// than reported: a comment style nobody agreed on should not stop a lint run.
+func ParseLanguages(r io.Reader) (Languages, error) {
+	var out Languages
+	err := eachRow(r, func(fields []string) {
+		if fields[0] == "" {
+			return
+		}
+		out = append(out, Language{
+			Code:     fields[0],
+			Style:    field(fields, 1),
+			Packages: strings.Fields(field(fields, 2)),
+			Policy:   policyLines(field(fields, 3)),
+		})
+	})
+	return out, err
+}
+
+// ParsePresets reads presets.conf.
+func ParsePresets(r io.Reader) (Presets, error) {
+	var out Presets
+	err := eachRow(r, func(fields []string) {
+		if len(fields) < 3 || fields[0] == "" || fields[1] == "" {
+			return
+		}
+		out = append(out, Preset{
+			Lang:        fields[0],
+			Code:        fields[1],
+			Style:       fields[2],
+			Description: field(fields, 3),
+			Preliminary: field(fields, 4) == "preliminary",
+		})
+	})
+	return out, err
+}
+
+// Find returns the row for a language code.
+func (l Languages) Find(code string) (Language, bool) {
+	for _, lang := range l {
+		if lang.Code == code {
+			return lang, true
+		}
+	}
+	return Language{}, false
+}
+
+// Codes lists every registered language in file order.
+func (l Languages) Codes() []string {
+	out := make([]string, 0, len(l))
+	for _, lang := range l {
+		out = append(out, lang.Code)
+	}
+	return out
+}
+
+// Find returns the preset for a language and code. A code such as "docs"
+// exists under more than one language, so the pair is the key. Looking up the
+// code alone picked the wrong language.
+func (p Presets) Find(lang, code string) (Preset, bool) {
+	for _, preset := range p {
+		if preset.Lang == lang && preset.Code == code {
+			return preset, true
+		}
+	}
+	return Preset{}, false
+}
+
+// FindByCode returns the first preset with this code under any language. It
+// answers "which language was this measured for", which is what the error
+// message needs when the caller asked for a preset the language does not have.
+func (p Presets) FindByCode(code string) (Preset, bool) {
+	for _, preset := range p {
+		if preset.Code == code {
+			return preset, true
+		}
+	}
+	return Preset{}, false
+}
+
+func eachRow(r io.Reader, fn func(fields []string)) error {
+	scanner := bufio.NewScanner(r)
+	scanner.Buffer(make([]byte, 0, 64*1024), 1024*1024)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+		fn(strings.Split(line, "|"))
+	}
+	return scanner.Err()
+}
+
+func field(fields []string, i int) string {
+	if i < len(fields) {
+		return strings.TrimSpace(fields[i])
+	}
+	return ""
+}
+
+func policyLines(raw string) []string {
+	var out []string
+	for _, part := range strings.Split(raw, ";") {
+		if part = strings.TrimSpace(part); part != "" {
+			out = append(out, part)
+		}
+	}
+	return out
+}

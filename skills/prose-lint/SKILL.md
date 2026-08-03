@@ -24,26 +24,31 @@ was clear and stop.
 
 ## Setup
 
-Run once per session, before anything else:
+Run this first. It prints the path to the binary and does nothing else:
 
 ```bash
-"${CLAUDE_PLUGIN_ROOT}"/scripts/ensure-vale.sh
+stet=$("${CLAUDE_PLUGIN_ROOT}"/scripts/bootstrap.sh)
 ```
 
-It prints a path to a working Vale, reusing one already on the machine and
-downloading a copy only when there is none. In Claude Code a session hook has
-normally done this already, and a second run costs nothing.
+The script finds an existing `stet`, downloads a release for this platform, or
+builds one from source when a Go toolchain is present. In Claude Code a session
+hook has normally run it already, and a second run costs nothing. Use `"$stet"`
+for every command below.
+
+Everything else the tool needs, Vale included, it fetches itself on first use.
+Nothing here asks to be installed by hand, and no step needs handing to the
+user.
 
 ## Linting
 
 ```bash
-"${CLAUDE_PLUGIN_ROOT}"/scripts/prose-lint.sh --lang uk --preset docs PATH...
+"$stet" lint --lang uk --preset docs PATH...
 ```
 
 `--lang` takes one code, a list, or `all`: `--lang uk`, `--lang uk,en`,
 `--lang all`. Registered codes live in `languages.conf`; read it rather than
 assuming which languages exist. Drop the flag when the project has its own
-`.vale.ini`: the wrapper walks up from the file and uses that instead.
+`.vale.ini`: the tool walks up from the file and uses that instead.
 
 Pick the language from the text, not from the conversation. A document written
 in one language with terms borrowed from another wants both codes.
@@ -54,7 +59,7 @@ in one language with terms borrowed from another wants both codes.
 list from the tool rather than from memory:
 
 ```bash
-"${CLAUDE_PLUGIN_ROOT}"/scripts/prose-lint.sh --list-presets
+"$stet" lint --list-presets
 ```
 
 Put the options to the user as a short question and say what the choice changes.
@@ -120,6 +125,22 @@ Report all three buckets at the end, not just the replacements. What you chose
 to keep is the part the user most needs to see, because that is where you
 overrode the linter.
 
+## Formatting, once the edits are in
+
+When the file is markdown, by its name or by what is inside it, finish with:
+
+```bash
+"$stet" fmt PATH...
+```
+
+**Run this last, after every edit is in place.** Editing is what breaks the
+layout: a replaced word overflows the line, a rewritten cell knocks a table out
+of alignment, and a shortened sentence leaves the wrapping ragged. Formatting
+first would only be undone by the next edit.
+
+It changes layout and never words, so it cannot undo a decision made above. Use
+`--check` to see whether anything would move without moving it.
+
 ## When the linter is wrong
 
 It often will be, and that is the design. Reach for these in order:
@@ -146,7 +167,7 @@ Punctuation rules work below the word level and ignore `accept.txt`. Only levers
 ## Setting a project up
 
 ```bash
-"${CLAUDE_PLUGIN_ROOT}"/scripts/init-project.sh --lang uk,en /path/to/project
+"$stet" init --lang uk,en /path/to/project
 ```
 
 Copies the rules into `.vale/styles` and writes a starter `.vale.ini`. After
