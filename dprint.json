@@ -7,6 +7,7 @@
   },
   "includes": ["**/*.md"],
   "excludes": [
+    "CHANGELOG.md",
     "styles/ai-tells/**",
     "styles/write-good/**",
     "tools/**",
