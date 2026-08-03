@@ -92,6 +92,7 @@ decays fastest. Six months is a reasonable interval for a review.
 stet lint --lang uk --preset docs PATH...   check a document
 stet lint --list-presets                    what registers exist
 stet rule <Style>.<Name>                    which lever reaches a rule
+stet vocab [PATH]                           which vocabulary a lint would read
 stet fmt PATH...                            tidy markdown, after the edits
 stet init --lang uk,en DIR                  give a project its own copy
 stet doctor                                 what this machine can do

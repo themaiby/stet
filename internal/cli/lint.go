@@ -103,7 +103,8 @@ func runLint(e *env, args []string) int {
 	syncPackages(e, vale, config)
 
 	// Reporting is the normal job, so findings do not fail the run. A gate asks
-	// for --fail and gets Vale's own exit code instead.
+	// for --fail and gets Vale's own exit code, which an error trips and a
+	// warning does not.
 	valeArgs := []string{"--config=" + config, "--output=" + f.Output}
 	if !f.Fail {
 		valeArgs = append([]string{"--no-exit"}, valeArgs...)
