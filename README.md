@@ -37,6 +37,14 @@ is wrong for a chat reply.
 It reads markdown, plain text, CSV and TSV, and it reads the comments out of
 source files while leaving the code alone.
 
+To keep a tree out of both the linter and the formatter, name it in a
+`.stetignore` at the project root, one glob per line:
+
+```text
+vendor/
+*.gen.md
+```
+
 ## Disagreeing with the linter
 
 Expected, and the reason the layers exist. In order of preference:

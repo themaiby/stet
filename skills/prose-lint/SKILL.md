@@ -82,6 +82,12 @@ reading. `--fail` returns a non-zero status when the text carries an error,
 which is what a gate wants and what a report does not. Warnings and suggestions
 never fail a run.
 
+A `.stetignore` at the project root keeps paths out of both the linter and the
+formatter, one glob per line, a trailing slash covering a directory. It holds
+whatever the project does not own: vendored trees, generated files, fixtures.
+Both tools obey it even when the path is named on the command line, so a finding
+that should exist and does not is worth checking against that file.
+
 Vale reads CSV and TSV directly and checks every field, including the ones with
 newlines inside them.
 
