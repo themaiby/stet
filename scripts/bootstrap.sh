@@ -25,18 +25,43 @@ say() { [ "$QUIET" -eq 1 ] || printf '%s\n' "$*" >&2; }
 mkdir -p "$DATA"
 printf '%s\n' "$ROOT" > "$DATA/root"
 
-for candidate in "$ROOT/bin/stet" "$DATA/bin/stet" "$DATA/bin/stet.exe"; do
+installed_version() { "$1" version 2>/dev/null | awk '{print $NF}'; }
+
+# A build made here is deliberate, and `go build` stamps no version into it, so
+# it is taken at face value.
+for candidate in "$ROOT/bin/stet" "$ROOT/bin/stet.exe"; do
   if [ -x "$candidate" ]; then
-    say "stet: $candidate"
+    say "stet: $candidate (built here)"
     printf '%s\n' "$candidate"
     exit 0
   fi
 done
+
 if command -v stet >/dev/null 2>&1; then
-  say "stet: $(command -v stet)"
-  command -v stet
+  found="$(command -v stet)"
+  found_version="$(installed_version "$found")"
+  if [ "$found_version" != "$VERSION" ]; then
+    say "stet: $found is $found_version and the rules here are $VERSION"
+  fi
+  say "stet: $found"
+  printf '%s\n' "$found"
   exit 0
 fi
+
+# The copy in the data directory is ours, and it outlives a plugin update. A
+# binary older than the rules beside it reads them wrongly or not at all, so a
+# mismatch is fetched again rather than used.
+for candidate in "$DATA/bin/stet" "$DATA/bin/stet.exe"; do
+  [ -x "$candidate" ] || continue
+  cached="$(installed_version "$candidate")"
+  if [ "$cached" = "$VERSION" ]; then
+    say "stet: $candidate (already downloaded)"
+    printf '%s\n' "$candidate"
+    exit 0
+  fi
+  say "stet: cached copy is $cached and the rules here are $VERSION, fetching again"
+  rm -f "$candidate"
+done
 
 os="$(uname -s)"
 arch="$(uname -m)"
