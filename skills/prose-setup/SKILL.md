@@ -50,6 +50,18 @@ tells the next reader nothing about why any of them is there.
 Reach for this when a whole tree is out of scope. When a single rule is wrong
 rather than a whole path, that is the `prose-policy` skill instead.
 
+## Grammar rules for a language
+
+The fifth field of a `languages.conf` row names the grammar rules that run
+beside Vale for that language. Only English has any, and a rule belongs there
+when it catches a plain mistake: agreement, confused words, repetition. Anything
+about house style stays with Vale, which knows the register.
+
+Adding one is measured against the project's own writing before it goes in. Of
+the checker's 823 rules, the set in use reports twice on this repository and
+both are real; the full set reports 64, most of them about heading case and
+spelling out numbers.
+
 ## What the machine can do
 
 ```bash

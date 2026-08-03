@@ -35,7 +35,9 @@ documentation and 1.9x in informal writing, so a rule that is right for a manual
 is wrong for a chat reply.
 
 It reads markdown, plain text, CSV and TSV, and it reads the comments out of
-source files while leaving the code alone.
+source files while leaving the code alone. English text also goes through a
+grammar checker that parses the sentence, which catches the agreement and
+confused-word mistakes no pattern can.
 
 To keep a tree out of both the linter and the formatter, name it in a
 `.stetignore` at the project root, one glob per line:

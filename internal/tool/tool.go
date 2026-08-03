@@ -63,6 +63,23 @@ var Dprint = Spec{
 	},
 }
 
+// Harper checks English grammar. Vale matches text and cannot ask a tagger, so
+// agreement and confused words are beyond it whatever rules it carries.
+var Harper = Spec{
+	Name:    "harper-cli",
+	Version: "2.7.0",
+	Assets: map[string]string{
+		"linux/amd64":   "harper-cli-x86_64-unknown-linux-gnu.tar.gz",
+		"linux/arm64":   "harper-cli-aarch64-unknown-linux-gnu.tar.gz",
+		"darwin/amd64":  "harper-cli-x86_64-apple-darwin.tar.gz",
+		"darwin/arm64":  "harper-cli-aarch64-apple-darwin.tar.gz",
+		"windows/amd64": "harper-cli-x86_64-pc-windows-msvc.zip",
+	},
+	URL: func(version, asset string) string {
+		return "https://github.com/Automattic/harper/releases/download/v" + version + "/" + asset
+	},
+}
+
 // Resolve returns a path to a usable binary, downloading one only if the
 // machine has none.
 func Resolve(spec Spec, layout paths.Layout, client *fetch.Client, log io.Writer) (string, error) {
