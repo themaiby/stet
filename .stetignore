@@ -3,3 +3,6 @@
 # a second time.
 data/
 styles/
+
+# release-please writes this one, quoting the commit subjects.
+CHANGELOG.md
