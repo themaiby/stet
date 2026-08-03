@@ -52,6 +52,14 @@ whatever `--lang` says, and one written in another language is itself a finding.
 A `.stetignore` at the project root holds the paths this and the formatter both
 skip. A finding you expected and did not get is worth checking against it.
 
+**Under `--lang en` alone, a grammar checker runs beside Vale**, and its
+findings arrive named `harper.<rule>` in the same report. It parses the
+sentence, so it reaches subject-verb agreement, `its` against `it's`, `their`
+against `there` and repeated words, none of which pattern matching can see. It
+stays off for every other language combination: an English grammar checker has
+nothing to say about a Ukrainian document, and a mixed one is a document in
+another language.
+
 ### Ask for the register first
 
 **Before linting anything, ask which register the text belongs to.** Get the

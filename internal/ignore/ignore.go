@@ -72,6 +72,31 @@ func (p Patterns) ValeGlob() string {
 	}
 }
 
+// Match reports whether a path is one the project keeps out. It exists for the
+// tools that take no exclusion flag of their own, whose findings have to be
+// dropped after the fact.
+func (p Patterns) Match(path string) bool {
+	path = filepath.ToSlash(path)
+	segments := strings.Split(path, "/")
+	for _, pattern := range p {
+		if prefix, ok := strings.CutSuffix(pattern, "/**"); ok {
+			for _, segment := range segments[:max(len(segments)-1, 0)] {
+				if segment == prefix {
+					return true
+				}
+			}
+			continue
+		}
+		if ok, _ := filepath.Match(pattern, filepath.Base(path)); ok {
+			return true
+		}
+		if ok, _ := filepath.Match(pattern, path); ok {
+			return true
+		}
+	}
+	return false
+}
+
 // DprintExcludes renders the patterns as the arguments dprint adds to whatever
 // its config already excludes. The flag is variadic and refuses to appear
 // twice, so every pattern hangs off one of it.

@@ -51,3 +51,22 @@ func TestDprintExcludesHangsEveryPatternOffOneFlag(t *testing.T) {
 		t.Error("no patterns produced arguments")
 	}
 }
+
+func TestMatch(t *testing.T) {
+	patterns := Patterns{"vendor/**", "*.gen.md", "CHANGELOG.md"}
+	cases := map[string]bool{
+		"vendor/doc.md":         true,
+		"a/vendor/b/doc.md":     true,
+		"docs/api.gen.md":       true,
+		"CHANGELOG.md":          true,
+		"deep/dir/CHANGELOG.md": true,
+		"docs/vendor.md":        false,
+		"README.md":             false,
+		"vendored/doc.md":       false,
+	}
+	for path, want := range cases {
+		if got := patterns.Match(path); got != want {
+			t.Errorf("Match(%q) = %v, want %v", path, got, want)
+		}
+	}
+}

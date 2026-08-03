@@ -15,7 +15,7 @@ func runDoctor(e *env, args []string) int {
 
 	line := func(name, state string) { fmt.Fprintf(e.Out, "  %-22s %s\n", name, state) }
 
-	for _, t := range []tool.Spec{tool.Vale, tool.Dprint} {
+	for _, t := range []tool.Spec{tool.Vale, tool.Dprint, tool.Harper} {
 		path, onPath, ok := tool.Present(t, e.Layout)
 		switch {
 		case ok && onPath:

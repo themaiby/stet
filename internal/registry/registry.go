@@ -10,12 +10,14 @@ import (
 
 // Language is one row of languages.conf:
 //
-//	code | style directory | packages | default policy lines
+//	code | style directory | packages | policy lines | grammar rules
 type Language struct {
 	Code     string
 	Style    string
 	Packages []string
 	Policy   []string
+	// Grammar names the rules a sentence-parsing checker runs beside Vale.
+	Grammar []string
 }
 
 // Preset is one row of presets.conf:
@@ -48,6 +50,7 @@ func ParseLanguages(r io.Reader) (Languages, error) {
 			Style:    field(fields, 1),
 			Packages: strings.Fields(field(fields, 2)),
 			Policy:   policyLines(field(fields, 3)),
+			Grammar:  splitList(field(fields, 4)),
 		})
 	})
 	return out, err
@@ -131,6 +134,16 @@ func field(fields []string, i int) string {
 		return strings.TrimSpace(fields[i])
 	}
 	return ""
+}
+
+func splitList(raw string) []string {
+	var out []string
+	for _, part := range strings.Split(raw, ",") {
+		if part = strings.TrimSpace(part); part != "" {
+			out = append(out, part)
+		}
+	}
+	return out
 }
 
 func policyLines(raw string) []string {

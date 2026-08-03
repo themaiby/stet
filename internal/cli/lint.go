@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/themaiby/stet/internal/build"
+	"github.com/themaiby/stet/internal/grammar"
 	"github.com/themaiby/stet/internal/ignore"
 	"github.com/themaiby/stet/internal/registry"
 	"github.com/themaiby/stet/internal/tool"
@@ -90,6 +92,13 @@ func runLint(e *env, args []string) int {
 		fmt.Fprintln(e.Err, "stet: this report is PARTIAL. Run 'stet build' to see the error.")
 	}
 
+	languages, err := loadLanguages(e)
+	if err != nil {
+		fmt.Fprintln(e.Err, err)
+		return 1
+	}
+	codes := requestedCodes(languages, f.Languages)
+
 	config := f.Config
 	if config == "" {
 		if config, err = chooseConfig(e, f); err != nil {
@@ -114,20 +123,68 @@ func runLint(e *env, args []string) int {
 		valeArgs = append(valeArgs, "--glob="+patterns.ValeGlob())
 		fmt.Fprintf(e.Err, "stet: %d path patterns ignored, from %s\n", len(patterns), from)
 	}
-	cmd := exec.Command(vale, append(valeArgs, f.Targets...)...)
-	cmd.Stdout, cmd.Stderr, cmd.Stdin = e.Out, e.Err, os.Stdin
-	if err := cmd.Run(); err != nil {
-		if code, ok := exitCode(err); ok {
-			return code
+	findings := checkGrammar(e, grammarRules(languages, codes), f.Targets)
+	if patterns, _ := ignore.Load(f.Targets[0]); len(patterns) > 0 {
+		kept := findings[:0]
+		for _, finding := range findings {
+			if !patterns.Match(finding.File) {
+				kept = append(kept, finding)
+			}
 		}
-		fmt.Fprintln(e.Err, err)
-		return 1
+		findings = kept
 	}
-	return 0
+
+	cmd := exec.Command(vale, append(valeArgs, f.Targets...)...)
+	cmd.Stderr, cmd.Stdin = e.Err, os.Stdin
+	var captured bytes.Buffer
+	if len(findings) > 0 && strings.EqualFold(f.Output, "JSON") {
+		cmd.Stdout = &captured
+	} else {
+		cmd.Stdout = e.Out
+	}
+
+	status := 0
+	if err := cmd.Run(); err != nil {
+		code, ok := exitCode(err)
+		if !ok {
+			fmt.Fprintln(e.Err, err)
+			return 1
+		}
+		status = code
+	}
+
+	if len(findings) > 0 {
+		if captured.Len() > 0 || strings.EqualFold(f.Output, "JSON") {
+			merged, err := grammar.MergeJSON(captured.Bytes(), findings)
+			if err != nil {
+				fmt.Fprintln(e.Err, err)
+				return 1
+			}
+			e.Out.Write(append(merged, '\n'))
+		} else {
+			fmt.Fprint(e.Out, grammar.Lines(findings))
+		}
+		if f.Fail && grammar.HasError(findings) {
+			status = 1
+		}
+	}
+	return status
 }
 
 // chooseConfig settles which policy applies: an explicit language, then a
 // project's own .vale.ini above the target, then every registered language.
+// requestedCodes resolves what --lang asked for into registered codes.
+func requestedCodes(languages registry.Languages, requested string) []string {
+	if requested == "" || requested == "all" {
+		return languages.Codes()
+	}
+	codes := strings.Split(requested, ",")
+	for i := range codes {
+		codes[i] = strings.TrimSpace(codes[i])
+	}
+	return codes
+}
+
 func chooseConfig(e *env, f lintFlags) (string, error) {
 	languages, err := loadLanguages(e)
 	if err != nil {
