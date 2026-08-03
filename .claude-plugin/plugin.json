@@ -1,7 +1,7 @@
 {
   "name": "stet",
   "description": "Prose linting for Ukrainian and English through Vale, with the rules shipped and the policy left to the project.",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "keywords": [
     "vale",
     "prose",
