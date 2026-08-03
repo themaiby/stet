@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/themaiby/stet/compare/v0.3.1...v0.4.0) (2026-08-03)
+
+
+### Features
+
+* add a skill for writing, not only for checking ([#17](https://github.com/themaiby/stet/issues/17)) ([683a999](https://github.com/themaiby/stet/commit/683a99950392a15afb12261628df8c1c92c0b65d))
+
+
+### Fixes
+
+* refuse a target that is not there, and find the rules from anywhere ([#19](https://github.com/themaiby/stet/issues/19)) ([8b91ac3](https://github.com/themaiby/stet/commit/8b91ac3180d7c9295246d2ab78b7a4e1b7611492))
+
 ## [0.3.1](https://github.com/themaiby/stet/compare/v0.3.0...v0.3.1) (2026-08-03)
 
 
