@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/themaiby/stet/compare/v0.4.0...v0.4.1) (2026-08-03)
+
+
+### Fixes
+
+* replace a cached binary that is behind the rules ([#20](https://github.com/themaiby/stet/issues/20)) ([5f7f983](https://github.com/themaiby/stet/commit/5f7f9837ff91d70ec9294cdbf40f644e9e49b898))
+
 ## [0.4.0](https://github.com/themaiby/stet/compare/v0.3.1...v0.4.0) (2026-08-03)
 
 
