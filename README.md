@@ -6,10 +6,10 @@ for every finding this tool gets wrong.
 Prose linting for Claude Code and Cowork, on top of [Vale](https://vale.sh).
 Ukrainian and English out of the box.
 
-Ask your assistant to check a document. It runs the linter, works the findings
-with you, and tidies the markdown when the words are settled. Vale never
-rewrites anything on its own: the findings set the scope, judgement sets the
-fix.
+Ask your assistant to check a document. It runs the linter and works the
+findings with you. Once the words are settled, it tidies the markdown. Vale
+never rewrites anything on its own: the findings set the scope, judgement sets
+the fix.
 
 ## Install
 
@@ -92,8 +92,8 @@ turned out to be backwards: `не X, а Y` reads like a machine habit and runs a
 against the second would have corrected people towards the machine.
 
 Word lists also rot. `delve` dropped sharply once researchers named it a marker,
-so every rule set carries a date and the packages are pinned rather than tracked
-at `latest`. Structure decays slowest and deserves the most weight; vocabulary
+so every rule set carries a date and the packages are pinned, not tracked at
+`latest`. Structure decays slowest and deserves the most weight; vocabulary
 decays fastest. Six months is a reasonable interval for a review.
 
 ## For anyone working on the plugin

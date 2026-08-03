@@ -34,11 +34,11 @@ the tool needs, Vale included, it fetches itself. In Claude Code a session hook
 has normally run it already, and a second run costs nothing.
 
 `--lang` takes one code, a list, or `all`. Registered codes live in
-`languages.conf`; read it rather than assuming which languages exist. Drop the
+`languages.conf`; read it instead of assuming which languages exist. Drop the
 flag when the project has its own `.vale.ini`, which the tool finds by walking
-up from the file. Pick the language from the text rather than from the
-conversation: a document written in one language with terms borrowed from
-another wants both codes.
+up from the file. Pick the language from the text, not from the conversation: a
+document written in one language with terms borrowed from another wants both
+codes.
 
 `--output=JSON` when you need to count or group. `--fail` returns a non-zero
 status when the text carries an error, which is what a gate wants and a report
@@ -76,7 +76,7 @@ Nothing formats during step 1, and nothing lints during step 3.
 ### Ask for the register first
 
 **Before linting anything, ask which register the text belongs to.** Get the
-list from the tool rather than from memory:
+list from the tool, not from memory:
 
 ```bash
 "$stet" lint --list-presets
@@ -107,7 +107,7 @@ Where a `references/<code>/glossary.md` exists it holds judgement notes rather
 than word lists: the calls the rules cannot make. Read it, do not apply it
 mechanically.
 
-Group `--output=JSON` by matched term rather than walking hit by hit. One term
+Group `--output=JSON` by matched term instead of walking hit by hit. One term
 recurs across a document with the same answer every time, so decide once and
 apply everywhere. A large report is normally a short list of decisions.
 
@@ -116,10 +116,10 @@ Each term falls into one of three buckets:
 - **Replace.** The finding suggests a native word that says the same thing and
   fits here. Apply it to every occurrence, adjusting the grammar around it.
 - **Keep.** The borrowing carries a meaning or a brevity the native word loses,
-  or the term is a name, an identifier or a quote. Note the reason rather than
+  or the term is a name, an identifier or a quote. Note the reason instead of
   skipping in silence.
 - **Allow.** It belongs to this project's working vocabulary, which is a policy
-  decision rather than a wording one. **Invoke the `prose-policy` skill**, which
+  decision and not a wording one. **Invoke the `prose-policy` skill**, which
   owns where that gets written and which findings it can reach.
 
 Severity sets how much doubt you may leave. An `error` gets fixed or allowed,
@@ -134,8 +134,8 @@ Report all three buckets at the end, not just the replacements. What you chose
 to keep is the part the user most needs to see, because that is where you
 overrode the linter.
 
-When a finding is simply wrong, or a whole class of them is, that is policy
-rather than wording. Invoke the `prose-policy` skill.
+When a finding is simply wrong, or a whole class of them is, that is policy and
+not wording. Invoke the `prose-policy` skill.
 
 ## Formatting, last
 

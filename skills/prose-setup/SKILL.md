@@ -47,8 +47,8 @@ Both the linter and the formatter obey it, and both obey it even when a path is
 named on the command line. Write the reason as a comment: a bare list of paths
 tells the next reader nothing about why any of them is there.
 
-Reach for this when a whole tree is out of scope. When a single rule is wrong
-rather than a whole path, that is the `prose-policy` skill instead.
+Reach for this when a whole tree is out of scope. A single wrong rule is the
+`prose-policy` skill instead.
 
 ## Grammar rules for a language
 
@@ -68,8 +68,8 @@ spelling out numbers.
 "$stet" doctor
 ```
 
-One line per capability rather than a single verdict, because most of what can
-be missing costs a rule set rather than the tool. Run it before blaming the
+One line per capability, not a single verdict, because most of what can go
+missing costs a rule set and not the tool. Run it before blaming the
 configuration for a missing finding.
 
 ## Adding a language
