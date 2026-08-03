@@ -45,7 +45,7 @@ jobs:
       # Also the end-to-end test of a cold install: the binary fetches Vale,
       # the word lists and the rule data itself.
       - name: Prose and comments
-        run: ./bin/stet lint README.md skills/ cmd/ internal/
+        run: ./bin/stet lint --fail README.md skills/ cmd/ internal/
 
       - name: Markdown layout
         run: ./bin/stet fmt --check
