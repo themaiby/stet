@@ -1,0 +1,11 @@
+# Markup tells, identical in any language.
+extends: existence
+message: "Форматування у машинному стилі: '%s'"
+level: suggestion
+nonword: true
+tokens:
+  - '^\s*[-*+] \*\*[^*]{2,60}\*\*:'
+  - '^\s*\d+\. \*\*[^*]{2,60}\*\*:'
+  - '\*\*[^*]{80,}\*\*'
+  - '^#{1,6} .*(Conclusion|Final Thoughts|Key Takeaways|Висновки|Підсумки)\s*$'
+  - '^#{1,6} .*(Challenges and|Виклики та|Переваги та недоліки)'

@@ -1,0 +1,27 @@
+# Working notes and research tooling: not part of the plugin
+HANDOFF-*.md
+tools/
+corpora/
+
+# Preset styles and their registry are generated from data this repository owns,
+# so they ship with it and no interpreter is needed to read them. What is fetched
+# from elsewhere stays out.
+
+# Fetched or generated at run time
+configs/.cache/
+.synced-*
+styles/ai-tells/
+styles/write-good/
+styles/config/dictionaries/
+styles/ProseUK/Preferred.yml
+styles/ProseUK/Barbarism.yml
+styles/ProseUK/Calque.yml
+
+# A language directory is structural and stays in the tree even when every rule
+# inside it is generated. Preset directories are output, so they are not here:
+# their names come from the generator, and pinning them would duplicate that.
+styles/ProseEN/*
+!styles/ProseEN/.gitkeep
+
+.idea/
+.DS_Store

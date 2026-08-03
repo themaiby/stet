@@ -1,0 +1,36 @@
+# construction	register	ai_per_1000	human_per_1000	excess
+# machine-written corpus: 12823 sentences
+# control docs: 80218 sentences
+delve	docs	0.312	0.000	999.00
+underscore	docs	0.156	1.222	0.13
+meticulous	docs	0.156	0.000	999.00
+intricate	docs	0.078	0.012	0.00
+testament to	docs	0.078	0.000	0.00
+pivotal	docs	0.078	0.000	0.00
+crucial	docs	0.078	0.037	2.09
+seamless	docs	0.702	0.012	999.00
+robust	docs	0.156	0.262	0.60
+comprehensive	docs	0.078	0.237	0.33
+leverage (verb)	docs	0.078	0.062	1.25
+foster	docs	0.156	0.050	3.13
+showcase	docs	0.702	0.025	28.15
+align with	docs	0.078	0.012	0.00
+boast	docs	0.000	0.000	0.00
+vibrant	docs	0.078	0.012	0.00
+not just X, but Y	docs	0.000	0.137	0.00
+it is not X, it is Y	docs	0.078	0.000	0.00
+rather than	docs	16.143	5.448	2.96
+serves as	docs	0.000	0.199	0.00
+stands as	docs	0.000	0.000	0.00
+marks a	docs	0.000	0.000	0.00
+it is worth noting	docs	0.078	0.025	3.13
+at its core	docs	0.078	0.000	0.00
+in the realm of	docs	0.078	0.000	0.00
+when it comes to	docs	0.078	0.025	3.13
+by extension	docs	0.000	0.087	0.00
+em dash	docs	84.770	0.112	755.56
+colon then capital	docs	119.629	430.739	0.28
+participial padding	docs	0.000	0.050	0.00
+ensure	docs	0.234	3.029	0.08
+utilize	docs	0.078	0.087	0.89
+facilitate	docs	0.078	0.150	0.52

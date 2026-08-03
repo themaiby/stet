@@ -1,0 +1,13 @@
+{
+  "name": "stet",
+  "owner": {
+    "name": "Kyrylo Lytvynov"
+  },
+  "plugins": [
+    {
+      "name": "stet",
+      "source": "./",
+      "description": "Prose linting for Ukrainian and English through Vale, with the rules shipped and the policy left to the project."
+    }
+  ]
+}

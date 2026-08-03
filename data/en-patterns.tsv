@@ -1,0 +1,36 @@
+# label<TAB>regex. Candidates from the excess-vocabulary papers and
+# Wikipedia signs of AI writing; the measurement decides which survive.
+# The em dash was measured at 755x and left to ai-tells.EmDashUsage, which
+# already carries it: see data/en-excess.tsv for the number.
+delve	\bdelv(e|es|ing|ed)\b
+underscore	\bunderscor(e|es|ing|ed)\b
+meticulous	\bmeticulous(ly)?\b
+intricate	\bintricat(e|ies|ely)\b
+testament to	\ba testament to\b
+pivotal	\bpivotal\b
+crucial	\bcrucial(ly)?\b
+seamless	\bseamless(ly)?\b
+robust	\brobust(ly|ness)?\b
+comprehensive	\bcomprehensive(ly)?\b
+leverage (verb)	\bleverag(e|es|ing|ed)\b
+foster	\bfoster(s|ing|ed)?\b
+showcase	\bshowcas(e|es|ing|ed)\b
+align with	\balign(s|ed|ing)? with\b
+boast	\bboast(s|ing|ed)?\b
+vibrant	\bvibrant\b
+not just X, but Y	\bnot (just|only) [^,.;:]{2,45},? but\b
+it is not X, it is Y	\bit'?s not [^,.;:]{2,45}, it'?s\b
+rather than	\brather than\b
+serves as	\bserv(es|ed|ing) as (a|an|the)\b
+stands as	\bstand(s|ing) as (a|an|the)\b
+marks a	\bmarks a (pivotal|significant|key|turning|critical|major)\b
+it is worth noting	\bit'?s? (is )?worth noting\b
+at its core	\bat its core\b
+in the realm of	\bin the realm of\b
+when it comes to	\bwhen it comes to\b
+by extension	\bby extension\b
+colon then capital	[a-z]:\s+[A-Z]
+participial padding	\b(highlighting|underscoring|emphasizing|reflecting) (its|the|a) \w+
+ensure	\bensur(e|es|ing|ed)\b
+utilize	\butiliz(e|es|ing|ed)\b
+facilitate	\bfacilitat(e|es|ing|ed)\b

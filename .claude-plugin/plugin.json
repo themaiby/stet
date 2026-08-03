@@ -1,0 +1,13 @@
+{
+  "name": "stet",
+  "description": "Prose linting for Ukrainian and English through Vale, with the rules shipped and the policy left to the project.",
+  "version": "0.1.0",
+  "keywords": [
+    "vale",
+    "prose",
+    "linting",
+    "ukrainian",
+    "english"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

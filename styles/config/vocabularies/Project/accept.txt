@@ -1,0 +1,15 @@
+# Terms this project allows.
+# One regular expression per line, so a single line covers every inflected form:
+#
+#   сорсинг.*      clears сорсинг, сорсингу, сорсингом
+#   [Ff]eedback    clears both cases
+#
+# Entries here become exceptions for EVERY word-matching rule, in every language.
+# Punctuation rules work below the word level and never read this file:
+# ProseCore.Typography, ProseCore.MixedScript, ProseUK.Apostrophe.
+# Silence those in .vale.ini instead.
+#
+# An empty file means no exceptions.
+equivalent
+ships?
+shipped
