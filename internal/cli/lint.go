@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/themaiby/stet/internal/build"
+	"github.com/themaiby/stet/internal/ignore"
 	"github.com/themaiby/stet/internal/registry"
 	"github.com/themaiby/stet/internal/tool"
 	"github.com/themaiby/stet/internal/valeconf"
@@ -108,6 +109,10 @@ func runLint(e *env, args []string) int {
 	valeArgs := []string{"--config=" + config, "--output=" + f.Output}
 	if !f.Fail {
 		valeArgs = append([]string{"--no-exit"}, valeArgs...)
+	}
+	if patterns, from := ignore.Load(f.Targets[0]); len(patterns) > 0 {
+		valeArgs = append(valeArgs, "--glob="+patterns.ValeGlob())
+		fmt.Fprintf(e.Err, "stet: %d path patterns ignored, from %s\n", len(patterns), from)
 	}
 	cmd := exec.Command(vale, append(valeArgs, f.Targets...)...)
 	cmd.Stdout, cmd.Stderr, cmd.Stdin = e.Out, e.Err, os.Stdin

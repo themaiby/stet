@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/themaiby/stet/internal/ignore"
 	"github.com/themaiby/stet/internal/tool"
 )
 
@@ -34,7 +35,20 @@ func runFormat(e *env, args []string) int {
 		return 1
 	}
 
-	cmd := exec.Command(dprint, append([]string{action, "--config", config}, targets...)...)
+	dprintArgs := []string{action, "--config", config}
+	scope := "."
+	if len(targets) > 0 {
+		scope = targets[0]
+	}
+	if patterns, from := ignore.Load(scope); len(patterns) > 0 {
+		dprintArgs = append(dprintArgs, patterns.DprintExcludes()...)
+		fmt.Fprintf(e.Err, "stet: %d path patterns ignored, from %s\n", len(patterns), from)
+	}
+	// A variadic --excludes would swallow the paths that follow it.
+	if len(targets) > 0 {
+		dprintArgs = append(dprintArgs, "--")
+	}
+	cmd := exec.Command(dprint, append(dprintArgs, targets...)...)
 	cmd.Stdout, cmd.Stderr = e.Out, e.Err
 	// The plugin is fetched rather than vendored, like every other third-party
 	// artefact here, and its cache goes where uninstall will find it.
