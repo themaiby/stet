@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.2](https://github.com/themaiby/stet/compare/v0.4.1...v0.4.2) (2026-08-03)
+
+
+### Fixes
+
+* build what the project writes in, and keep the marker out of its tree ([#24](https://github.com/themaiby/stet/issues/24)) ([7e81254](https://github.com/themaiby/stet/commit/7e8125412f96124d04262aa1ef8b25cbd02cfc31))
+* repair a rule that never matched, and speak the reader's language ([#22](https://github.com/themaiby/stet/issues/22)) ([d3b6b09](https://github.com/themaiby/stet/commit/d3b6b097c74556d07852aa71da5ad60ebe2ff1dc))
+
 ## [0.4.1](https://github.com/themaiby/stet/compare/v0.4.0...v0.4.1) (2026-08-03)
 
 
