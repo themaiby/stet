@@ -10,7 +10,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 DATA="${CLAUDE_PLUGIN_DATA:-${XDG_DATA_HOME:-$HOME/.local/share}/stet}"
-VERSION="${STET_VERSION:-0.3.0}" # x-release-please-version
+VERSION="${STET_VERSION:-0.3.1}" # x-release-please-version
 QUIET=0
 
 for arg in "$@"; do
