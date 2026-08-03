@@ -54,9 +54,10 @@ Expected, and the reason the layers exist. In order of preference:
 [Ff]eedback
 ```
 
-Entries there become exceptions for every word-matching rule, in every language.
-Punctuation rules work below the word level and ignore the file; silence those
-in `.vale.ini`.
+Entries there reach every rule that matches whole words. They do not reach a
+rule that matches below the word level, which is most of the punctuation rules
+and half of `ai-tells`. Ask `stet rule <Style>.<Name>` which of the two a rule
+is, and silence the second kind in `.vale.ini`.
 
 Do not edit the bundled rules to quiet a finding. A rule states a claim about
 the text. What to do about the claim is yours.
@@ -90,6 +91,7 @@ decays fastest. Six months is a reasonable interval for a review.
 ```text
 stet lint --lang uk --preset docs PATH...   check a document
 stet lint --list-presets                    what registers exist
+stet rule <Style>.<Name>                    which lever reaches a rule
 stet fmt PATH...                            tidy markdown, after the edits
 stet init --lang uk,en DIR                  give a project its own copy
 stet doctor                                 what this machine can do

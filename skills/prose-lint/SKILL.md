@@ -78,7 +78,8 @@ Without `--preset` only the register-independent rules run. That is the safe
 fallback when nobody answers, not the default to reach for.
 
 `--output=JSON` when you need to count or group; the default line format is for
-reading.
+reading. `--fail` returns a non-zero status when the text has findings, which is
+what a gate wants and what a report does not.
 
 Vale reads CSV and TSV directly and checks every field, including the ones with
 newlines inside them.
@@ -113,9 +114,8 @@ Each term falls into one of three buckets:
 - **Keep.** The borrowing carries a meaning or a brevity the native word loses,
   or the term is a name, an identifier or a quote. Note the reason rather than
   skipping in silence.
-- **Allow.** It belongs to this project's working vocabulary, which is a policy
-  decision rather than a wording one. Propose an `accept.txt` line and let the
-  user confirm before writing it.
+- **Allow.** It belongs to this project's working vocabulary. Record it, in the
+  project, by the next section.
 
 Structure comes first. When the text sits in a table, edit cell by cell and
 check afterwards that the column count, the header and the line endings
@@ -124,6 +124,48 @@ survived. A document that lints clean but no longer parses is a failure.
 Report all three buckets at the end, not just the replacements. What you chose
 to keep is the part the user most needs to see, because that is where you
 overrode the linter.
+
+## Keeping the project's vocabulary
+
+The plugin has no idea what this project writes about. You do, by the time you
+have read its text, so the vocabulary is yours to keep. Write it as you go
+rather than proposing it: a term you decided to keep and did not record comes
+back as a finding on every later run.
+
+It lives at `.vale/styles/config/vocabularies/Project/`, `accept.txt` for terms
+this project allows and `reject.txt` for terms it bans that no rule catches yet.
+Lines are regular expressions, so one line covers every inflected form.
+
+Decide per term, not per finding:
+
+- **Allow** when the term recurs, the project has settled on it, and no native
+  word carries the same meaning: a product name, an API, a domain term, a
+  spelling this project has chosen. One line in `accept.txt`.
+- **Fix** when a native word says the same thing here. Apply it everywhere and
+  record nothing.
+- **Skip once** when the term is a quotation, an identifier, or the subject the
+  sentence is discussing. Change nothing and write nothing down. A one-off does
+  not earn a line, and a vocabulary of one-offs stops meaning anything.
+
+Severity decides how much doubt you are allowed. An `error` gets fixed or
+allowed, never skipped. A `warning` or `suggestion` may be skipped when the text
+reads better as it stands, and skipping is a decision you report.
+
+**Check that the lever reaches the rule before using it.** Rules matching below
+the word level never read `accept.txt`, and a line added for one of them looks
+like it worked while changing nothing. Ask:
+
+```bash
+"$stet" rule ai-tells.ShipOveruse
+```
+
+When it says `accept.txt` does not reach the rule, the levers are demotion or
+removal in the project's `.vale.ini`, and switching a rule off is a decision
+that belongs to the user rather than to you. Say what you would turn off and
+why, and leave it to them.
+
+Report what you wrote to either file, with the reason. Vocabulary is policy, and
+policy the user never saw is policy they cannot disagree with.
 
 ## Formatting, once the edits are in
 
@@ -145,10 +187,8 @@ It changes layout and never words, so it cannot undo a decision made above. Use
 
 It often will be, and that is the design. Reach for these in order:
 
-1. **The term is fine in this project.** Add it to
-   `.vale/styles/config/vocabularies/Project/accept.txt`. Lines are regular
-   expressions, so one line covers every inflected form. Reach here first for a
-   documented list of permitted terms.
+1. **The term is fine in this project.** Add it to `accept.txt`, per the section
+   above. Reach here first, and only after `stet rule` says the rule reads it.
 2. **The whole class matters less here.** Demote it in `.vale.ini`:
    `ProseUK.Morphology = suggestion`.
 3. **The class does not apply at all.** Switch it off:
@@ -161,8 +201,9 @@ overriding a finding.
 Never edit the bundled rules to silence a finding. A rule states a claim about
 the text; the project decides what to do about the claim.
 
-Punctuation rules work below the word level and ignore `accept.txt`. Only levers
-2 and 3 reach them.
+Rules that match below the word level ignore `accept.txt`, and that is most of
+the punctuation rules and 36 of the 76 in `ai-tells`. Only levers 2 and 3 reach
+them, and both are the user's call.
 
 ## Setting a project up
 

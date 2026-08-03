@@ -4,12 +4,11 @@
 #   сорсинг.*      clears сорсинг, сорсингу, сорсингом
 #   [Ff]eedback    clears both cases
 #
-# Entries here become exceptions for EVERY word-matching rule, in every language.
-# Punctuation rules work below the word level and never read this file:
-# ProseCore.Typography, ProseCore.MixedScript, ProseUK.Apostrophe.
-# Silence those in .vale.ini instead.
+# Entries here reach every rule that matches whole words, in every language.
+# They do NOT reach a rule declaring `nonword: true`, which matches below the
+# word level: that is most punctuation rules and 36 of the 76 in ai-tells.
+# Ask `stet rule <Style>.<Name>` before adding a line, and silence the rest in
+# .vale.ini instead.
 #
 # An empty file means no exceptions.
 equivalent
-ships?
-shipped
