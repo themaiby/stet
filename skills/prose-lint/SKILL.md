@@ -60,6 +60,19 @@ stays off for every other language combination: an English grammar checker has
 nothing to say about a Ukrainian document, and a mixed one is a document in
 another language.
 
+### The order
+
+The tools run in this order, and never all from one command:
+
+1. **`stet lint`** reports. It resolves Vale, builds the rule data when cold,
+   then prints Vale's findings and, under `--lang en` alone, the grammar
+   checker's after them. One report, both sources.
+2. **You edit**, deciding per term. Anything that outlives this document, an
+   allowed term or a silenced rule, goes through the `prose-policy` skill.
+3. **`stet fmt`** settles the layout, once nothing else will move.
+
+Nothing formats during step 1, and nothing lints during step 3.
+
 ### Ask for the register first
 
 **Before linting anything, ask which register the text belongs to.** Get the
