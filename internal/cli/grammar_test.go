@@ -74,3 +74,21 @@ func TestGrammarStaysOffWhenTheLanguageDeclaresNoRules(t *testing.T) {
 		t.Errorf("got %v, want nil", got)
 	}
 }
+
+// Vale reads a path it cannot find as stdin and reports nothing wrong with it,
+// so an unchecked target comes back as a clean document. That is the worst way
+// for a linter to fail, and it happened: a file list that zsh passed as one
+// argument reported clean over 36 files.
+func TestMissingTargetsAreReported(t *testing.T) {
+	present := filepath.Join(t.TempDir(), "doc.md")
+	if err := os.WriteFile(present, []byte("# T\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	got := missingTargets([]string{present, "no-such-file.md", present + "\nalso-not-here.md"})
+	if len(got) != 2 {
+		t.Fatalf("missing = %v, want two entries", got)
+	}
+	if missingTargets([]string{present}) != nil {
+		t.Error("a target that exists was reported missing")
+	}
+}
