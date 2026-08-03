@@ -1,0 +1,5 @@
+# The measurement tables and the vocabulary quote every construction they ban,
+# so each rule fires on its own subject matter. The generated styles quote them
+# a second time.
+data/
+styles/

@@ -23,7 +23,7 @@ or shorten. `write-good.TooWordy` and `ai-tells.FillerPhrases` cover most of it.
 The register a language model reaches for by default: `delve into`,
 `at its
 core`, `a testament to`, `not just X, but Y`, `move the needle`. The
-`ai-tells` package finds these. Rewrite rather than swap: the fix is to state
+`ai-tells` package finds these. Rewrite instead of swapping: the fix is to state
 the point the phrase stood in for.
 
 ## Adjectives that promise more than they carry

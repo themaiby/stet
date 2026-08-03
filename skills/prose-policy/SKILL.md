@@ -49,9 +49,9 @@ reads the vocabulary, and that covers most punctuation rules and 36 of the 76 in
 ```
 
 When it reports that `accept.txt` does not reach the rule, only levers 2 and 3
-are left. **Both belong to the user rather than to you**: say which rule you
-would demote or disable and why, and let them decide. Silencing a class of
-findings is a bigger decision than any single finding.
+are left. **Both are the user's call, not yours**: say which rule you would
+demote or disable and why, and let them decide. Silencing a class of findings is
+a bigger decision than any single finding.
 
 ## Deciding
 
