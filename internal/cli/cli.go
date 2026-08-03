@@ -20,6 +20,7 @@ const usage = `stet: prose linting for Ukrainian and English, on top of Vale.
   stet lint --list-presets
   stet fmt [--check] [PATH...]        format markdown, after the edits are in
   stet rule <Style>.<Name>            which lever reaches a rule
+  stet vocab [PATH]                   which vocabulary a lint would read
   stet build [--detach|--status] [CODES]
   stet init [--lang CODES] [--force] [DIR]
   stet doctor
@@ -73,6 +74,8 @@ func Main(args []string) int {
 		run = runInit
 	case "rule":
 		run = runRule
+	case "vocab":
+		run = runVocab
 	case "doctor":
 		run = runDoctor
 	case "uninstall":

@@ -78,8 +78,9 @@ Without `--preset` only the register-independent rules run. That is the safe
 fallback when nobody answers, not the default to reach for.
 
 `--output=JSON` when you need to count or group; the default line format is for
-reading. `--fail` returns a non-zero status when the text has findings, which is
-what a gate wants and what a report does not.
+reading. `--fail` returns a non-zero status when the text carries an error,
+which is what a gate wants and what a report does not. Warnings and suggestions
+never fail a run.
 
 Vale reads CSV and TSV directly and checks every field, including the ones with
 newlines inside them.
@@ -132,9 +133,22 @@ have read its text, so the vocabulary is yours to keep. Write it as you go
 rather than proposing it: a term you decided to keep and did not record comes
 back as a finding on every later run.
 
-It lives at `.vale/styles/config/vocabularies/Project/`, `accept.txt` for terms
-this project allows and `reject.txt` for terms it bans that no rule catches yet.
-Lines are regular expressions, so one line covers every inflected form.
+**Find out where it goes before writing a word:**
+
+```bash
+"$stet" vocab PATH
+```
+
+A project scaffolded by `stet init` has its own, under
+`.vale/styles/config/vocabularies/Project/`. A project without one falls back to
+the copy inside the plugin, which every other project on the machine shares and
+`stet uninstall` deletes. Writing there is worse than not writing at all, so
+when `vocab` reports that scope, scaffold the project first with `stet init`, or
+say why you did not and record nothing.
+
+`accept.txt` holds terms this project allows, `reject.txt` terms it bans that no
+rule catches yet. Lines are regular expressions, so one line covers every
+inflected form.
 
 Decide per term, not per finding:
 
