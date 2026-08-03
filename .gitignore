@@ -1,7 +1,18 @@
-# Working notes and research tooling: not part of the plugin
-HANDOFF-*.md
+# Research tooling: it measured data/*.tsv and is not part of the plugin
 tools/
-corpora/
+
+# Editor and agent scratch. Agent instructions are working notes, and the
+# plugin's own directories below are the only part of this that ships.
+.idea/
+.serena/
+.claude/
+CLAUDE.md
+AGENTS.md
+.DS_Store
+
+# Compiled binaries
+bin/
+dist/
 
 # Preset styles and their registry are generated from data this repository owns,
 # so they ship with it and no interpreter is needed to read them. What is fetched
@@ -22,6 +33,3 @@ styles/ProseUK/Calque.yml
 # their names come from the generator, and pinning them would duplicate that.
 styles/ProseEN/*
 !styles/ProseEN/.gitkeep
-
-.idea/
-.DS_Store
