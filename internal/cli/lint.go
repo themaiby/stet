@@ -78,6 +78,16 @@ func runLint(e *env, args []string) int {
 		return 2
 	}
 
+	// Vale reads a path it cannot find as stdin and reports nothing wrong with
+	// it, so a mistyped or unsplit argument comes back as a clean document.
+	if missing := missingTargets(f.Targets); len(missing) > 0 {
+		for _, target := range missing {
+			fmt.Fprintf(e.Err, "stet: no such file or directory: %s\n", target)
+		}
+		fmt.Fprintln(e.Err, "stet: nothing was checked.")
+		return 2
+	}
+
 	vale, err := tool.Resolve(tool.Vale, e.Layout, e.Client, e.Err)
 	if err != nil {
 		fmt.Fprintln(e.Err, err)
@@ -241,6 +251,7 @@ func generateConfig(e *env, languages registry.Languages, codes []string, preset
 			return "", err
 		}
 		options.Preset = preset
+		options.PresetPolicy = presetPolicy(e, preset.Lang, preset.Code)
 		// A language measured on one register has no base style to add.
 		base := strings.ToUpper(preset.Lang) + "Base"
 		if info, err := os.Stat(e.Layout.Style(base)); err == nil && info.IsDir() {
@@ -279,6 +290,34 @@ func resolvePreset(e *env, codes []string, name string) (*registry.Preset, error
 		lines = append(lines, fmt.Sprintf("  %-10s %s", p.Code, p.Description))
 	}
 	return nil, fmt.Errorf("stet: unknown preset %q. Available:\n%s", name, strings.Join(lines, "\n"))
+}
+
+// presetPolicy reads what the chosen register turns off. A missing file means
+// no register has an opinion, which is a fine state for a project to be in.
+func presetPolicy(e *env, lang, code string) []string {
+	file, err := os.Open(e.Layout.PresetPolicy())
+	if err != nil {
+		return nil
+	}
+	defer file.Close()
+	policy, err := registry.ParsePresetPolicy(file)
+	if err != nil {
+		fmt.Fprintf(e.Err, "stet: cannot read the preset policy: %v\n", err)
+		return nil
+	}
+	return policy.For(lang, code)
+}
+
+// missingTargets returns the paths that are not there. A linter that reports a
+// clean document it never opened is worse than one that refuses to start.
+func missingTargets(targets []string) []string {
+	var missing []string
+	for _, target := range targets {
+		if _, err := os.Stat(target); err != nil {
+			missing = append(missing, target)
+		}
+	}
+	return missing
 }
 
 func findProjectConfig(target string) (string, bool) {

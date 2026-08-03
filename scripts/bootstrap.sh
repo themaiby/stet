@@ -20,6 +20,11 @@ for arg in "$@"; do
 done
 say() { [ "$QUIET" -eq 1 ] || printf '%s\n' "$*" >&2; }
 
+# The binary may live in the data directory, nowhere near the rules, and a
+# caller outside Claude Code has no CLAUDE_PLUGIN_ROOT to point it back here.
+mkdir -p "$DATA"
+printf '%s\n' "$ROOT" > "$DATA/root"
+
 for candidate in "$ROOT/bin/stet" "$DATA/bin/stet" "$DATA/bin/stet.exe"; do
   if [ -x "$candidate" ]; then
     say "stet: $candidate"

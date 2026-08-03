@@ -35,6 +35,9 @@ type Options struct {
 	// BaseStyle is the register-independent style that accompanies a preset,
 	// empty when the language has none.
 	BaseStyle string
+	// PresetPolicy is what the chosen register turns off or demotes. A rule can
+	// be wrong for a manual and right for a chat reply.
+	PresetPolicy []string
 }
 
 // Render returns the config text.
@@ -106,6 +109,11 @@ func Render(o Options) string {
 		line("ProseCore.Typography = NO")
 	}
 	for _, p := range policy {
+		line(p)
+	}
+	// The register goes last because it knows more about this text than the
+	// language row does.
+	for _, p := range o.PresetPolicy {
 		line(p)
 	}
 	line("")

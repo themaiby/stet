@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Layout is the resolved pair of roots.
@@ -65,6 +66,9 @@ func (l Layout) Languages() string { return filepath.Join(l.Root, "languages.con
 // Presets is the preset registry, which the preset generator writes.
 func (l Layout) Presets() string { return filepath.Join(l.Root, "presets.conf") }
 
+// PresetPolicy is the hand-written policy that accompanies a register.
+func (l Layout) PresetPolicy() string { return filepath.Join(l.Root, "presets-policy.conf") }
+
 // DataFile names a committed measurement file.
 func (l Layout) DataFile(name string) string { return filepath.Join(l.Root, "data", name) }
 
@@ -92,6 +96,13 @@ func findRoot() (string, error) {
 	}
 	if wd, err := os.Getwd(); err == nil && isRoot(wd) {
 		return wd, nil
+	}
+	// A downloaded binary sits in the data directory, nowhere near the rules.
+	// bootstrap.sh knows where they are and leaves the answer behind.
+	if recorded, err := os.ReadFile(filepath.Join(dataDir(), "root")); err == nil {
+		if candidate := strings.TrimSpace(string(recorded)); isRoot(candidate) {
+			return candidate, nil
+		}
 	}
 	return "", ErrNoRoot
 }

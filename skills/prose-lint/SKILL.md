@@ -49,6 +49,10 @@ Source files work too: it pulls the comments out and leaves the code alone, so
 `.ts`, `.py` and `.go` go in the same way. Comments are checked as English
 whatever `--lang` says, and one written in another language is itself a finding.
 
+A path that is not there stops the run with `no such file or directory` instead
+of reporting a clean document. Pass each target as its own argument: a shell
+that hands the whole list over as one string gets that error, not a false pass.
+
 A `.stetignore` at the project root holds the paths this and the formatter both
 skip. A finding you expected and did not get is worth checking against it.
 
@@ -121,6 +125,25 @@ Each term falls into one of three buckets:
 - **Allow.** It belongs to this project's working vocabulary, which is a policy
   decision and not a wording one. **Invoke the `prose-policy` skill**, which
   owns where that gets written and which findings it can reach.
+
+### write-good is a judgement call
+
+The package calls itself a naive linter, and on documentation the description
+fits. `TooWordy` fires on ordinary words and goes off under `--preset docs`;
+`Passive` sits at suggestion, because a document often has the file as its
+actor. What is left still misses about as often as it helps.
+
+Read the sentence and decide. Where the text is right as it stands, leave it and
+move on, with no note and no line in the report. Mention one of these only where
+the wording actually changed.
+
+**Never reword a sentence only to clear one of these.** You are doing that when
+the replacement runs longer, says less, or you cannot say why it reads better. A
+linter satisfied by worse prose has cost the document twice.
+
+That latitude stops at the measured rules. A preset finding carries a number,
+and `ai-tells` carries a pattern somebody counted, so both get an answer instead
+of a shrug.
 
 Severity sets how much doubt you may leave. An `error` gets fixed or allowed,
 never skipped. A `warning` or `suggestion` may stand when the text reads better

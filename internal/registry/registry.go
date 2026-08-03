@@ -74,6 +74,28 @@ func ParsePresets(r io.Reader) (Presets, error) {
 	return out, err
 }
 
+// PresetPolicy holds the policy lines a preset adds, keyed by language and code.
+// presets.conf is generated from measurement and states no opinions, so the
+// opinions live apart from it.
+type PresetPolicy map[string][]string
+
+// ParsePresetPolicy reads presets-policy.conf.
+func ParsePresetPolicy(r io.Reader) (PresetPolicy, error) {
+	out := PresetPolicy{}
+	err := eachRow(r, func(fields []string) {
+		if len(fields) < 3 || fields[0] == "" || fields[1] == "" {
+			return
+		}
+		if lines := policyLines(fields[2]); len(lines) > 0 {
+			out[fields[0]+"|"+fields[1]] = lines
+		}
+	})
+	return out, err
+}
+
+// For returns the policy a preset adds, and nothing when it adds none.
+func (p PresetPolicy) For(lang, code string) []string { return p[lang+"|"+code] }
+
 // Find returns the row for a language code.
 func (l Languages) Find(code string) (Language, bool) {
 	for _, lang := range l {
