@@ -1,6 +1,6 @@
 # Homoglyphs: invisible to a reader, fatal to search.
 extends: existence
-message: "Кирилиця й латиниця в одному слові: '%s'"
+message: "Cyrillic and Latin in one word: '%s'"
 level: error
 nonword: true
 tokens:

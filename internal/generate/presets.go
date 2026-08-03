@@ -42,6 +42,13 @@ var registers = map[string]register{
 	"fiction":  {"Fiction", "fiction", "художня література"},
 }
 
+// A finding is read by whoever wrote the text, so it speaks the language the
+// register was measured on.
+var messages = map[string]struct{ Base, Register string }{
+	"UK": {"Машинний зворот: '%s'", "Машинний зворот для цього стилю: '%s'"},
+	"EN": {"Machine phrasing: '%s'", "Machine phrasing for this register: '%s'"},
+}
+
 // preliminary registers have a control corpus too small to trust.
 var preliminary = map[string]bool{"fiction": true}
 
@@ -176,7 +183,7 @@ func Presets(patterns []Pattern, excess Excess, notes []string, lang, source str
 		header := provenance +
 			fmt.Sprintf("# Excess of at least %.0fx in every solid register.\n", baseMin) +
 			corpora + "\n"
-		set.Files = append(set.Files, ruleFiles(lang+"Base", header, "Машинний зворот: '%s'", base)...)
+		set.Files = append(set.Files, ruleFiles(lang+"Base", header, messages[lang].Base, base)...)
 	}
 
 	for _, name := range measured {
@@ -191,7 +198,7 @@ func Presets(patterns []Pattern, excess Excess, notes []string, lang, source str
 		}
 		header := provenance + fmt.Sprintf("# Register: %s.\n", reg.Description) + note + corpora + "\n"
 		dir := lang + reg.Style
-		set.Files = append(set.Files, ruleFiles(dir, header, "Машинний зворот для цього стилю: '%s'", items)...)
+		set.Files = append(set.Files, ruleFiles(dir, header, messages[lang].Register, items)...)
 
 		row := fmt.Sprintf("%s|%s|%s|%s", strings.ToLower(lang), reg.Code, dir, reg.Description)
 		if preliminary[name] {

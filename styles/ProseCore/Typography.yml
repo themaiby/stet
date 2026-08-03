@@ -1,6 +1,6 @@
 # Below word level, so accept.txt does not reach it.
 extends: existence
-message: "Друкарський недогляд: '%s'"
+message: "Typographic slip: '%s'"
 level: suggestion
 nonword: true
 tokens:

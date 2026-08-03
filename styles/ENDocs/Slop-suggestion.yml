@@ -3,7 +3,7 @@
 # machine-written corpus: 12823 sentences
 # control docs: 80218 sentences
 extends: existence
-message: "Машинний зворот для цього стилю: '%s'"
+message: "Machine phrasing for this register: '%s'"
 level: suggestion
 ignorecase: true
 nonword: true
