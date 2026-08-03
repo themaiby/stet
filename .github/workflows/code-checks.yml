@@ -39,6 +39,11 @@ jobs:
       - name: Tests
         run: go test ./...
 
+      # Runs before the build, because a bin/stet in the tree wins ahead of the
+      # cases it covers.
+      - name: Bootstrap resolution
+        run: ./scripts/test-bootstrap.sh
+
       - name: Build
         run: go build -o bin/stet ./cmd/stet
 
