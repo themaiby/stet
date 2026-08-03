@@ -108,12 +108,18 @@ stet uninstall --dry-run                    what removing it would take
 ```
 
 ```text
+skills/prose-lint/   check a document and work the findings
+skills/prose-policy/ allow a term, demote or silence a rule
+skills/prose-setup/  scaffold a project, keep paths out, add a language
+```
+
+```text
 languages.conf     the registry: code, style directory, packages
 data/              measured excess ratios and the constructions behind them
 styles/ProseCore/  language-neutral: dashes, spacing, mixed scripts
 styles/ProseUK/    Ukrainian: dictionary inversion, morphology, generated pairs
 styles/ProseEN/    English: generated pairs, ai-tells carries the rest
-skills/prose-lint/ the skill and its per-language references
+skills/            the three skills and the per-language references
 cmd/, internal/    the binary: generators, config, linting, warm-up
 ```
 
