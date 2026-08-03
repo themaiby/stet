@@ -38,7 +38,15 @@ func runBuild(e *env, args []string) int {
 			fmt.Fprintln(e.Err, err)
 			return 1
 		}
+		// A project says which languages it writes in, and building the others
+		// costs it the Ukrainian dictionary alone at 273 MB.
 		requested = languages.Codes()
+		if config, found := findProjectConfig("."); found {
+			if fromConfig := languagesInConfig(config, languages); len(fromConfig) > 0 {
+				requested = fromConfig
+				fmt.Fprintf(e.Err, "stet: building %v, from %s\n", requested, config)
+			}
+		}
 	}
 
 	if mode == "detach" {

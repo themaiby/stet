@@ -2,6 +2,8 @@ package cli
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"os/exec"
@@ -352,9 +354,15 @@ func syncPackages(e *env, vale, config string) {
 	if !strings.HasPrefix(text, "Packages") && !strings.Contains(text, "\nPackages") {
 		return
 	}
-	// The marker goes stale when the config changes its package list, and a
-	// stale marker keeps the old rules in place with nothing to show for it.
-	marker := filepath.Join(filepath.Dir(config), ".synced-"+filepath.Base(config))
+	// The marker belongs to this machine, not to the project, so it goes with
+	// the rest of what stet downloads. It goes stale when the config changes its
+	// package list, and a stale marker keeps the old rules in place with nothing
+	// to show for it.
+	sum := sha256.Sum256([]byte(config))
+	marker := filepath.Join(e.Layout.Data, "synced", hex.EncodeToString(sum[:8]))
+	if err := os.MkdirAll(filepath.Dir(marker), 0o755); err != nil {
+		return
+	}
 	if synced, err := os.Stat(marker); err == nil {
 		if written, err := os.Stat(config); err == nil && !written.ModTime().After(synced.ModTime()) {
 			return
