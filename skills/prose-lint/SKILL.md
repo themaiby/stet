@@ -152,6 +152,11 @@ would only be undone by the next edit. It moves layout and never words, so it
 cannot undo a decision made above. `--check` reports what would move without
 moving it.
 
+## When you are the one writing
+
+Producing the text, as opposed to checking it, is the `prose-write` skill. It
+holds what no rule reaches and ends by sending the result back here.
+
 ## When the project has no setup
 
 A project with no `.vale.ini` of its own, or one that needs paths kept out:
