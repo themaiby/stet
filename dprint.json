@@ -1,0 +1,17 @@
+{
+  "markdown": {
+    "lineWidth": 80,
+    "textWrap": "always",
+    "emphasisKind": "asterisks",
+    "strongKind": "asterisks"
+  },
+  "includes": ["**/*.md"],
+  "excludes": [
+    "styles/ai-tells/**",
+    "styles/write-good/**",
+    "tools/**",
+    "bin/**",
+    "dist/**"
+  ],
+  "plugins": ["https://plugins.dprint.dev/markdown-0.22.1.wasm"]
+}

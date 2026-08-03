@@ -13,16 +13,18 @@ for `start`, `facilitate` for `help`, `ascertain` for `find out`.
 
 ## Padding
 
-Phrases that occupy space without adding meaning: `in order to`, `due to the
-fact that`, `at this point in time`, `it is worth noting that`. Cut or shorten.
-`write-good.TooWordy` and `ai-tells.FillerPhrases` cover most of it.
+Phrases that occupy space without adding meaning: `in order to`,
+`due to the
+fact that`, `at this point in time`, `it is worth noting that`. Cut
+or shorten. `write-good.TooWordy` and `ai-tells.FillerPhrases` cover most of it.
 
 ## Machine phrasing
 
-The register a language model reaches for by default: `delve into`, `at its
-core`, `a testament to`, `not just X, but Y`, `move the needle`. The `ai-tells`
-package finds these. Rewrite rather than swap: the fix is to state the point the
-phrase stood in for.
+The register a language model reaches for by default: `delve into`,
+`at its
+core`, `a testament to`, `not just X, but Y`, `move the needle`. The
+`ai-tells` package finds these. Rewrite rather than swap: the fix is to state
+the point the phrase stood in for.
 
 ## Adjectives that promise more than they carry
 
@@ -32,8 +34,8 @@ behind it.
 
 ## Hedging and weasels
 
-`arguably`, `somewhat`, `a number of`, `many experts say`. Either name the number
-and the source, or drop the qualifier. `write-good.Weasel` finds them.
+`arguably`, `somewhat`, `a number of`, `many experts say`. Either name the
+number and the source, or drop the qualifier. `write-good.Weasel` finds them.
 
 ## What English keeps
 

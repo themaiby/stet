@@ -9,14 +9,14 @@ English stems carried over with Ukrainian endings, where a native verb already
 exists: `аутріч`, `челенджити`, `пітчити`, `фолоапити`, `овнити`, `пушити`,
 `шерити`, `апрувити`.
 
-Replace these by default. `ProseUK.Anglicism` finds them; `glossary.md` says what
-to write instead.
+Replace these by default. `ProseUK.Anglicism` finds them; `glossary.md` says
+what to write instead.
 
 ## Whole English sentences left in
 
 `Never gives up`, `Creates momentum`, `Designs interview frameworks` sitting
-inside Ukrainian text. Not terminology, just an unfinished translation. Translate
-them fully.
+inside Ukrainian text. Not terminology, just an unfinished translation.
+Translate them fully.
 
 ## Metric names
 
@@ -45,5 +45,7 @@ Cyrillic words. Invisible to a reader, fatal to search and sorting.
 ## What Ukrainian keeps
 
 Job grades in their settled form: Junior, Middle, Senior, Lead. Established
-borrowings with no shorter native form: `конверсія`, `воронка`, `таргетована
-реклама`. Long-naturalised words are not the target; recent transliterations are.
+borrowings with no shorter native form: `конверсія`, `воронка`,
+`таргетована
+реклама`. Long-naturalised words are not the target; recent
+transliterations are.

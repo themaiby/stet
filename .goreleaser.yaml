@@ -1,0 +1,35 @@
+version: 2
+
+# The plugin fetches its own binary, so the asset names here are the ones
+# scripts/bootstrap.sh asks for. Changing a name here breaks installation.
+project_name: stet
+
+builds:
+  - id: stet
+    main: ./cmd/stet
+    binary: stet
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/themaiby/stet/internal/cli.Version={{ .Version }}
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - id: stet
+    ids: [stet]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files: []
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  draft: false

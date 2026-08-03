@@ -12,8 +12,8 @@ swap that flattens it costs more than it saves.
 
 ## When the padding does work
 
-`It is worth noting that` can nearly always go. Before a real caveat the reader would
-otherwise skip, keep it. Read what follows the phrase before cutting it.
+`It is worth noting that` can nearly always go. Before a real caveat the reader
+would otherwise skip, keep it. Read what follows the phrase before cutting it.
 
 ## Adjectives
 

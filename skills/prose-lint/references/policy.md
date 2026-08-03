@@ -34,8 +34,8 @@ A term that has become part of the team's working language belongs in
 `accept.txt`, not in an edit. That is a policy decision, so surface it rather
 than making it silently.
 
-Fix what the linter found, not what it did not. Rewriting a sentence that no rule
-touched is scope you were not given.
+Fix what the linter found, not what it did not. Rewriting a sentence that no
+rule touched is scope you were not given.
 
 ## Typography
 
